@@ -28,30 +28,30 @@ def create_database(db_name,table_name,sql):
 
 if __name__ == "__main__":
     db_name = 'Bookmark_Database.db'
-    SqlUser = """CREATE TABLE User(
-                UserID INTEGER
-                UserName TEXT
-                ScreenName TEXT
+    SqlUser = """CREATE TABLE User
+                (UserID INTEGER,
+                UserName TEXT,
+                ScreenName TEXT,
                 PRIMARY KEY(UserID))"""
     SqlTweet = """CREATE TABLE Tweet(
-                TweetID INTEGER
-                UserID INTEGER
-                TweetText TEXT
-                PRIMARY KEY(TweetID)
+                TweetID INTEGER,
+                UserID INTEGER,
+                TweetText TEXT,
+                PRIMARY KEY(TweetID),
                 FOREIGN KEY(UserID)
-                REFERNECES User(UserID))"""
-    SqlBookmark = """CREATE TABLE Bookmark(
-               BookmarkID INTEGER
-               BookmarkTitle TEXT
-               SiteName TEXT
-               SiteDescription TEXT
-               Link TEXT
-               TweetID INTEGER
-               PRIMARY KEY(BookmarkID)
+                REFERENCES User(UserID))"""
+    SqlBookmark = """CREATE TABLE Bookmark
+               (BookmarkID INTEGER,
+               BookmarkTitle TEXT,
+               SiteName TEXT,
+               SiteDescription TEXT,
+               Link TEXT,
+               TweetID INTEGER,
+               PRIMARY KEY(BookmarkID),
                FOREIGN KEY(TweetID)
-               REFERNCES Tweet(TweetID))"""
+               REFERENCES Tweet(TweetID))"""
     create_database(db_name,'User',SqlUser)
     create_database(db_name,'Tweet',SqlTweet)
-    craete_database(db_name,'Bookmark',SqlBookmark)
+    create_database(db_name,'Bookmark',SqlBookmark)
 
             
