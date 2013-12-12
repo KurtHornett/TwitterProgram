@@ -55,10 +55,15 @@ class MainWindow(QMainWindow):
         self.searchAction.triggered.connect(self.newSearch)
         self.addAction.triggered.connect(self.addBookmark)
 
+        #Actions for sub-classes
+        self.bookmarkInterface.cancelButton.clicked.connect(self.cancelAction)
+
     def newSearch(self):
-               self.layout.setCurrentWidget(self.searchInterface.searchWidget)
+        self.layout.setCurrentWidget(self.searchInterface.searchWidget)
     def addBookmark(self):
         self.layout.setCurrentWidget(self.bookmarkInterface.bookmarkWidget)
+    def cancelAction(self):
+        self.layout.setCurrentWidget(self.searchInterface.searchWidget)
         
         
 
