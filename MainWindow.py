@@ -58,6 +58,7 @@ class MainWindow(QMainWindow):
         self.searchAction.triggered.connect(self.newSearch)
         self.addAction.triggered.connect(self.addBookmark)
         self.modifyAction.triggered.connect(self.modifyBookmarks)
+        self.quitAction.triggered.connect(self.quit_)
 
         #Actions for sub-classes
         self.bookmarkInterface.cancelButton.clicked.connect(self.cancelAction)
@@ -71,6 +72,10 @@ class MainWindow(QMainWindow):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
     def modifyBookmarks(self):
         self.layout.setCurrentWidget(self.tableInterface.tableWidget)
+
+
+    def quit_(self):
+        window.close()
         
         
 
