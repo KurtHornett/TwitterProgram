@@ -7,6 +7,7 @@ from PyQt4.QtSql import *
 
 from SearchWindow import *
 from BookmarkTool import *
+from TableView import *
 
 import sys
 
@@ -40,11 +41,13 @@ class MainWindow(QMainWindow):
         #Import Layouts
         self.searchInterface = SearchWindow()
         self.bookmarkInterface = BookmarkWindow()
+        self.tableInterface = TableViewWindow()
 
         #Create Layout
         self.layout = QStackedLayout()
         self.layout.addWidget(self.searchInterface.searchWidget)
         self.layout.addWidget(self.bookmarkInterface.bookmarkWidget)
+        self.layout.addWidget(self.tableInterface.tableWidget)
 
         #Set Main Widget
         self.widget = QWidget()
@@ -54,9 +57,11 @@ class MainWindow(QMainWindow):
         #Add Action Actions
         self.searchAction.triggered.connect(self.newSearch)
         self.addAction.triggered.connect(self.addBookmark)
+        self.modifyAction.triggered.connect(self.modifyBookmarks)
 
         #Actions for sub-classes
         self.bookmarkInterface.cancelButton.clicked.connect(self.cancelAction)
+        self.tableInterface.cancelButton.clicked.connect(self.cancelAction)
 
     def newSearch(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
@@ -64,6 +69,8 @@ class MainWindow(QMainWindow):
         self.layout.setCurrentWidget(self.bookmarkInterface.bookmarkWidget)
     def cancelAction(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
+    def modifyBookmarks(self):
+        self.layout.setCurrentWidget(self.tableInterface.tableWidget)
         
         
 
