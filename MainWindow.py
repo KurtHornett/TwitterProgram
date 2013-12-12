@@ -6,7 +6,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
 from SearchWindow import *
-from BookmarkMenu import *
+from BookmarkTool import *
 
 import sys
 
@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         self.logOutAction = self.fileMenu.addAction('Log Out')
         self.quitAction = self.fileMenu.addAction('Quit')
         self.searchAction = self.searchMenu.addAction('New Search')
-        self.addAction = self.managementmenu.addAction('Add Bookmark')
+        self.addAction = self.managementMenu.addAction('Add Bookmark')
         self.deleteAction = self.managementMenu.addAction('Delete Entries')
         self.modifyAction = self.managementMenu.addAction('Modity Databases')
         self.suggestedAction = self.suggestedMenu.addAction('Display Suggested Users')
@@ -39,10 +39,12 @@ class MainWindow(QMainWindow):
 
         #Import Layouts
         self.searchInterface = SearchWindow()
+        self.bookmarkInterface = BookmarkWindow()
 
         #Create Layout
         self.layout = QStackedLayout()
         self.layout.addWidget(self.searchInterface.searchWidget)
+        self.layout.addWidget(self.bookmarkInterface.bookmarkWidget)
 
         #Set Main Widget
         self.widget = QWidget()
@@ -50,6 +52,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.widget)
 
         #Add Action Actions
+        self.searchAction.triggered.connect(self.newSearch)
+        self.addAction.triggered.connect(self.addBookmark)
+
+    def newSearch(self):
+               self.layout.setCurrentWidget(self.searchInterface.searchWidget)
+    def addBookmark(self):
+        self.layout.setCurrentWidget(self.bookmarkInterface.bookmarkWidget)
+        
         
 
 if __name__ == '__main__':
