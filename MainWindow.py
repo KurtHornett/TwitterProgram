@@ -66,12 +66,16 @@ class MainWindow(QMainWindow):
 
     def newSearch(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
+        self.setWindowTitle('New Search')
     def addBookmark(self):
         self.layout.setCurrentWidget(self.bookmarkInterface.bookmarkWidget)
+        self.setWindowTitle('Add Bookamrk')
     def cancelAction(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
+        self.setWindowTitle('New Search')
     def modifyBookmarks(self):
         self.layout.setCurrentWidget(self.tableInterface.tableWidget)
+        self.setWindowTitle('Modify Database')
 
 
     def quit_(self):
