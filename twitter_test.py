@@ -19,4 +19,5 @@ twitter = Twitter(auth=OAuth(
 tm = twitter.statuses.home_timeline()
 print(tm[0]['user']['screen_name'])
 print(tm[0]['text'])
+print(tm[0]['entities']['urls'][0]['url'])
     
