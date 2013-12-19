@@ -8,7 +8,7 @@ from twitter import *
 from sqlite3 import *
 
 #User Made Maodules
-from twitter-database import *
+
 
 #System Modules
 import os
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         if choice == 3:
             displayLatestTweets(home_timeline,count)
         if choice == 9:
-            checkingStuff(home_timeline,count)
+            displayLinks(home_timeline,count)
         
         
     
