@@ -8,7 +8,7 @@ from twitter import *
 from sqlite3 import *
 
 #User Made Maodules
-
+from twitter-database import *
 
 #System Modules
 import os
@@ -25,6 +25,7 @@ def mainMenu():
     print('1. Authorize application')
     print('2. Get Home Timeline')
     print('3. Print 10 latest Tweets')
+    print('4. Add Tweet to database')
     print('0. Exit Application')
     print()
 
@@ -106,4 +107,3 @@ if __name__ == "__main__":
         
         
     
-
