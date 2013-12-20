@@ -8,7 +8,7 @@ from twitter import *
 from sqlite3 import *
 
 #User Made Maodules
-
+from twitter_database import *
 
 #System Modules
 import os
@@ -22,7 +22,7 @@ def mainMenu():
     print()
     print('Twitter Management Program')
     print()
-    print('1. Authorize application')
+    print('1. Null')
     print('2. Get Home Timeline')
     print('3. Print 10 latest Tweets')
     print('4. Add Tweet to database')
@@ -39,15 +39,17 @@ def getConsumerKey():
         consumer_key = pickle.load(key)
     return consumer_key
 
-def twitterLogIn(consumer_key):
+def authApp(consumer_key):
     #All necessary proceedures for authorising app and therefore loggin into twitter, doesn't allow log out.
     #Uses PIN authorization  - could change to UserPass later in app stages and implemetation
     MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
     if not os.path.exists(MY_TWITTER_CREDS):
         oauth_dance("KurtsApp",'Y4zkic6lw0Hu6uB3sNVH4Q', consumer_key,
                         MY_TWITTER_CREDS)
-    oauth_token, oauth_secret = read_token_file(MY_TWITTER_CREDS)
 
+
+def createTwitterObject():
+    oauth_token, oauth_secret = read_token_file(MY_TWITTER_CREDS)
     #Creation of twitter object with authorized detailes.
     twitter = Twitter(auth=OAuth(
         oauth_token, oauth_secret, 'Y4zkic6lw0Hu6uB3sNVH4Q', consumer_key))
@@ -89,6 +91,8 @@ def checkingStuff(hm,count):
 if __name__ == "__main__":
     #Consumer key required regardless
     consumer_key = getConsumerKey()
+    authApp(consumer_key)
+    twitter = createTwitterObject()
     choice = 1
     count = 0
     #Typical while loop for managing program.
@@ -97,11 +101,21 @@ if __name__ == "__main__":
         mainMenu()
         choice = getChoice()
         if choice == 1:
-            twitter = twitterLogIn(consumer_key)
+            pass
         if choice == 2:
             home_timeline = getHomeTimeline(twitter)
+            hm = home_timeline
         if choice == 3:
             displayLatestTweets(home_timeline,count)
+        if choice == 4:
+            databaseMenu()
+            choice = getChoice()
+            while choice != 0:
+                if choice == 1:
+                    number = int(input('Enter number tweet to add: '))
+                    addUser(hm,number)
+                    addTweet(hm,number)
+                    addBookmark(hm,number)
         if choice == 9:
             displayLinks(home_timeline,count)
         
