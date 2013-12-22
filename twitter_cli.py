@@ -22,11 +22,19 @@ def mainMenu():
     print()
     print('Twitter Management Program')
     print()
-    print('1. Null')
+    print('1. Get a Users Time Line')
     print('2. Get Home Timeline')
     print('3. Print 10 latest Tweets')
     print('4. Add Tweet to database')
     print('0. Exit Application')
+    print()
+
+def HomeUserMenu():
+    print()
+    print('Please select Home Timeline or User Timeline')
+    print()
+    print('1. Home Timeline')
+    print('2. User Timeline')
     print()
 
 def getChoice():
@@ -42,7 +50,7 @@ def getConsumerKey():
 def authApp(consumer_key):
     #All necessary proceedures for authorising app and therefore loggin into twitter, doesn't allow log out.
     #Uses PIN authorization  - could change to UserPass later in app stages and implemetation
-    MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
+    #MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
     if not os.path.exists(MY_TWITTER_CREDS):
         oauth_dance("KurtsApp",'Y4zkic6lw0Hu6uB3sNVH4Q', consumer_key,
                         MY_TWITTER_CREDS)
@@ -74,6 +82,13 @@ def displayLatestTweets(hm,count):
                                                             'No Link'))
             
         count += 1
+
+def getUserTimeLine():
+    try:
+        timeline = twitter.statuses.user_timeline(id=input('Please enter screen name: '))
+        return timeline
+    except:
+        print('An error occured')
               
 def displayLinks(hm,count):
     print('{0:<3} {1:<21}'.format('No.','Link'))
@@ -91,6 +106,7 @@ def checkingStuff(hm,count):
 if __name__ == "__main__":
     #Consumer key required regardless
     consumer_key = getConsumerKey()
+    MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
     authApp(consumer_key)
     twitter = createTwitterObject()
     choice = 1
@@ -101,12 +117,17 @@ if __name__ == "__main__":
         mainMenu()
         choice = getChoice()
         if choice == 1:
-            pass
+            userTm = getUserTimeLine()
         if choice == 2:
             home_timeline = getHomeTimeline(twitter)
             hm = home_timeline
         if choice == 3:
-            displayLatestTweets(home_timeline,count)
+            HomeUserMenu()
+            HoMo = getChoice()
+            if HoMo == 1:
+                displayLatestTweets(home_timeline,count)
+            else:
+                displayLatestTweets(userTm,count)
         if choice == 4:
             databaseMenu()
             choice = getChoice()
