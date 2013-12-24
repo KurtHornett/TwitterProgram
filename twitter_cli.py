@@ -25,7 +25,7 @@ def mainMenu():
     print('1. Get a Users Time Line')
     print('2. Get Home Timeline')
     print('3. Print 10 latest Tweets')
-    print('4. Add Tweet to database')
+    print('4. Add User to database')
     print('0. Exit Application')
     print()
 
@@ -133,12 +133,14 @@ if __name__ == "__main__":
             choice = getChoice()
             while choice != 0:
                 if choice == 1:
-                    number = int(input('Enter number tweet to add: '))
-                    addUser(hm,number)
-                    addTweet(hm,number)
-                    addBookmark(hm,number)
+                    try:
+                        user = getUser(twitter)
+                        addUserFromSearch(user)
+                    except:
+                        print('An error has occured')
         if choice == 9:
-            displayLinks(home_timeline,count)
+            user = getUser(twitter)
+            addUserFromSearch(user)
         
         
     

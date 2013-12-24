@@ -13,7 +13,7 @@ def databaseMenu():
     print()
     print('Database Management Aspect')
     print()
-    print('1. Add Tweet to database')
+    print('1. Add User to database')
     print()
 
 def query(sql,data):
@@ -22,8 +22,21 @@ def query(sql,data):
         cursor.execute(sql,data)
         db.commit()
 
-        
-def addUser(hm,number):
+def getUser(twitter):
+    try:
+        search = input('Please enter handle to search for: ')
+        userList = twitter.users.lookup(screen_name=search)
+        return userList
+    except:
+        print('An error has occcured')
+
+def addUserFromSearch(userList):
+    sql = '''INSERT INTO User(UserName,ScreenName)
+               VALUES(?,?)'''
+    data = (userList[0]['name'],userList[0]['screen_name'])
+    query(sql,data)
+
+def addUserFromTweet(hm,number):
     sql = '''INSERT INTO User(UserName,ScreenName)
                Values(?,?)'''
     data = (hm[number]['user']['name'],hm[number]['user']['screen_name'])
@@ -42,20 +55,7 @@ def addBookmark(hm,number):
     query(sql,data)
 
 if __name__ == '__main__':
-    databaseMenu()
-    choice = getChoice()
-    while choice != 0:
-        if choice == 1:
-            number = int(input('Enter number tweet to add: '))
-            data = (hm[number]['user']['user_name'],
-                    hm[number]['user']['screen_name'],
-                    hm[number]['text'],
-                    'Bookmark x',
-                    'Site name',
-                    'Good Site',
-                    hm[number]['entites']['urls'][0]['url'],
-                    1
-                )
-            addToDatabase(data)
+    user = getUser(twitter)
+    addUserFromSearch(user)
             
     
