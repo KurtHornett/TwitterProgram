@@ -26,6 +26,7 @@ def mainMenu():
     print('2. Get Home Timeline')
     print('3. Print 10 latest Tweets')
     print('4. Add User to database')
+    print('5. Print tweets from User in Database')
     print('0. Exit Application')
     print()
 
@@ -98,6 +99,25 @@ def displayLinks(hm,count):
         else:
              print('{0:<3} {1:<21}'.format(count+1,'No Link'))
         count += 1
+
+def displayUsers(users):
+    count = 1
+    print()
+    print('Users in database')
+    print()
+    for user in users:
+            print('{0:<3}{1:<21}'.format(count,user[0]))
+            count += 1
+    print()
+
+def displayUsersTimeline(choice,users,twitter):
+    try:
+        userTm = twitter.statuses.user_timeline(id=users[choice-1][1])
+        count = 0
+        displayLatestTweets(userTm,count)
+    except:
+        print('An error has occured.')
+
 def checkingStuff(hm,count):
     while count <= 10:
         print(hm[count]['entities']['urls'])
@@ -138,6 +158,11 @@ if __name__ == "__main__":
                         addUserFromSearch(user)
                     except:
                         print('An error has occured')
+        if choice == 5:
+            users = getUsersFromDatabase()
+            displayUsers(users)
+            choice = getChoice()
+            displayUsersTimeline(choice,users,twitter)
         if choice == 9:
             user = getUser(twitter)
             addUserFromSearch(user)

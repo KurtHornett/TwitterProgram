@@ -22,6 +22,13 @@ def query(sql,data):
         cursor.execute(sql,data)
         db.commit()
 
+def searchQuery(sql):
+    with sqlite3.connect('Bookmark_database-cli-test.db') as db:
+        cursor = db.cursor()
+        cursor.execute(sql)
+        users = cursor.fetchall()
+        return users
+
 def getUser(twitter):
     try:
         search = input('Please enter handle to search for: ')
@@ -29,6 +36,12 @@ def getUser(twitter):
         return userList
     except:
         print('An error has occcured')
+
+def getUsersFromDatabase():
+    sql = '''SELECT Username,ScreenName
+               From User'''
+    users = searchQuery(sql)
+    return users
 
 def addUserFromSearch(userList):
     sql = '''INSERT INTO User(UserName,ScreenName)
