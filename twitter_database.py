@@ -26,8 +26,8 @@ def searchQuery(sql):
     with sqlite3.connect('Bookmark_database-cli-test.db') as db:
         cursor = db.cursor()
         cursor.execute(sql)
-        users = cursor.fetchall()
-        return users
+        results = cursor.fetchall()
+        return results
 
 def getUser(twitter):
     try:
@@ -38,7 +38,7 @@ def getUser(twitter):
         print('An error has occcured')
 
 def getUsersFromDatabase():
-    sql = '''SELECT Username,ScreenName
+    sql = '''SELECT Username,ScreenName,UserID
                From User'''
     users = searchQuery(sql)
     return users
@@ -55,17 +55,24 @@ def addUserFromTweet(hm,number):
     data = (hm[number]['user']['name'],hm[number]['user']['screen_name'])
     query(sql,data)
 
-def addTweet(hm,number):
-    sql = '''INSERT INTO Tweet(TweetText) VALUES(?)'''
-    data = (hm[number]['text'],)
+def addTweet(Users,UserTm,Tnumber,Uchoice):
+    sql = '''INSERT INTO Tweet(TweetText,UserID) VALUES(?,?)'''
+    data = (UserTm[Tnumber-1]['text'],Users[Uchoice-1][2])
     query(sql,data)
 
 def addBookmark(hm,number):
     sql = '''INSERT INTO Bookmark(BookmarkTitle,SiteName,SiteDescription,Link,TweetID)
                VALUES(?,?,?,?,?)'''
-    data = ('Null Title','Null Site Name','Null Site Description',hm[number]['entities']['urls'][0]['url'],
-            1)
+    tweetID = getLatestTweet()
+    print(tweetID[0][0])
+    data = ('Null','Null','Null',hm[number-1]['entities']['urls'][0]['url'],tweetID[0][0])
     query(sql,data)
+
+def getLatestTweet():
+    sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
+    maxId = searchQuery(sql)
+    return maxId
+
 
 if __name__ == '__main__':
     user = getUser(twitter)

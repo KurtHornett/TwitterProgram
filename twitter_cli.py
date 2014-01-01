@@ -106,7 +106,7 @@ def displayUsers(users):
     print('Users in database')
     print()
     for user in users:
-            print('{0:<3}{1:<21}'.format(count,user[0]))
+            print('{0:<3}{1:<21}'.format(count,user))
             count += 1
     print()
 
@@ -115,13 +115,20 @@ def displayUsersTimeline(choice,users,twitter):
         userTm = twitter.statuses.user_timeline(id=users[choice-1][1])
         count = 0
         displayLatestTweets(userTm,count)
+        return userTm
     except:
         print('An error has occured.')
 
-def checkingStuff(hm,count):
-    while count <= 10:
-        print(hm[count]['entities']['urls'])
-        count += 1
+
+def getYN():
+    YN = input('Save a tweet Y/N: ')
+    YN = YN.upper()
+    return YN
+
+def checkingStuff():
+    sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
+    maxId = searchQuery(sql)
+    return maxId
 
 if __name__ == "__main__":
     #Consumer key required regardless
@@ -161,11 +168,17 @@ if __name__ == "__main__":
         if choice == 5:
             users = getUsersFromDatabase()
             displayUsers(users)
-            choice = getChoice()
-            displayUsersTimeline(choice,users,twitter)
+            Uchoice = getChoice()
+            userTm = displayUsersTimeline(Uchoice,users,twitter)
+            YN = getYN()
+            if YN == 'Y':
+                Tnumber = getChoice()
+                addTweet(users,userTm,Tnumber,Uchoice)
+                print(userTm[Tnumber-1]['entities']['urls'][0]['url'])
+                addBookmark(userTm,Tnumber)
         if choice == 9:
-            user = getUser(twitter)
-            addUserFromSearch(user)
+            maxID = checkingStuff()
+            print(maxID[0][0])
         
         
     
