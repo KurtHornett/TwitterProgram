@@ -73,6 +73,8 @@ def displayLatestTweets(hm,count):
     #Print information of 10 latest tweets as a table
     print('{0:<3}{1:<15}{2:<140}{3:<21}'.format('No.','Screen Name','Tweet Text','Links'))
     while count < 10:
+        #Checks to see that the tweets have links; if there are no links then the print statement crashes the
+        #programme.
         if hm[count]['entities']['urls'] != []:
             print('{0:<3}{1:<15}{2:<140}{3:<21}'.format(count+1,hm[count]['user']['screen_name'],
                                                             hm[count]['text'],
@@ -106,7 +108,7 @@ def displayUsers(users):
     print('Users in database')
     print()
     for user in users:
-            print('{0:<3}{1:<21}'.format(count,user))
+            print('{0:<3}{1:<21}'.format(count,user[0]))
             count += 1
     print()
 
@@ -157,28 +159,36 @@ if __name__ == "__main__":
                 displayLatestTweets(userTm,count)
         if choice == 4:
             databaseMenu()
-            choice = getChoice()
-            while choice != 0:
-                if choice == 1:
+            choice1 = getChoice()
+            while choice1 != 0:
+                if choice1 == 1:
                     try:
                         user = getUser(twitter)
-                        addUserFromSearch(user)
+                        users = getUsersFromDatabase()
+                        check=False
+                        for users in users:
+                            if users[1] == user[0]['screen_name']:
+                                check = True
+                        if check == False:
+                            addUserFromSearch(user)
+                        else:
+                            print('User already exits, not added')
                     except:
-                        print('An error has occured')
+                        print('An error occur\'d')
+                    choice1 = 0
         if choice == 5:
             users = getUsersFromDatabase()
             displayUsers(users)
             Uchoice = getChoice()
-            userTm = displayUsersTimeline(Uchoice,users,twitter)
-            YN = getYN()
-            if YN == 'Y':
-                Tnumber = getChoice()
-                addTweet(users,userTm,Tnumber,Uchoice)
-                print(userTm[Tnumber-1]['entities']['urls'][0]['url'])
-                addBookmark(userTm,Tnumber)
+            while Uchoice != 0:
+                userTm = displayUsersTimeline(Uchoice,users,twitter)
+                YN = getYN()
+                if YN == 'Y':
+                    Tnumber = getChoice()
+                    addTweet(users,userTm,Tnumber,Uchoice)
+                    addBookmark(userTm,Tnumber)
         if choice == 9:
-            maxID = checkingStuff()
-            print(maxID[0][0])
+            pass
         
         
     

@@ -65,13 +65,22 @@ def addBookmark(hm,number):
                VALUES(?,?,?,?,?)'''
     tweetID = getLatestTweet()
     print(tweetID[0][0])
-    data = ('Null','Null','Null',hm[number-1]['entities']['urls'][0]['url'],tweetID[0][0])
+    if hm[number-1]['entities']['urls'] != []:
+        link = hm[number-1]['entities']['urls'][0]['url']
+    else:
+        link = 'No Link'
+    data = ('Null','Null','Null',link,tweetID[0][0])
     query(sql,data)
 
 def getLatestTweet():
     sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
     maxId = searchQuery(sql)
     return maxId
+
+def getBookmarkData():
+    bookmarkTitle = input('Please enter a title for the bookmark: ')
+    
+    return bookmarkTitle
 
 
 if __name__ == '__main__':
