@@ -5,6 +5,9 @@
 
 from twitter import *
 
+import re
+import urllib.request
+
 from twitter_cli import *
 
 import sqlite3
@@ -65,10 +68,12 @@ def addBookmark(hm,number):
                VALUES(?,?,?,?,?)'''
     tweetID = getLatestTweet()
     if hm[number-1]['entities']['urls'] != []:
-        link = hm[number-1]['entities']['urls'][0]['expanded_url']
+        link = hm[number-1]['entities']['urls'][0]['url']
+        bookmarkTitle,siteName,siteDesc = getBookmarkData(link)
     else:
         link = 'No Link'
-    data = ('Null','Null','Null',link,tweetID[0][0])
+        bookmarkTitle,siteName,siteDesc = getBookmarkData(link)
+    data = (bookmarkTitle,siteName,siteDesc,link,tweetID[0][0])
     query(sql,data)
 
 def getLatestTweet():
@@ -76,10 +81,24 @@ def getLatestTweet():
     maxId = searchQuery(sql)
     return maxId
 
-def getBookmarkData():
+def getBookmarkData(link):
     bookmarkTitle = input('Please enter a title for the bookmark: ')
-    
-    return bookmarkTitle
+    siteName = 'Null'
+    siteDesc = 'Null'
+    if link != 'No Link':
+        try:
+            #Create RE for finding title
+            regex = re.compile('<title>(.+?)</title>')
+            url = urllib.request.urlopen(link) #Gets the data from the url
+            html = url.read() #Converts HTTPRequest into text
+            html = str(html) #Changes from 'bytes' to str so re will work
+            print(regex.search(html).group(1))
+            siteName = regex.search(html).group(1)
+            siteDesc = input('Please enter a short description of the site: ')
+        except:
+            print()
+            print('No HTML Title Found')
+    return bookmarkTitle,siteName,siteDesc
 
 def getBookmarks():
 ##    sql = '''SELECT TweetText,UserID, TweetID FROM Tweet'''
