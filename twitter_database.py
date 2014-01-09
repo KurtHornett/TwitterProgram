@@ -64,9 +64,8 @@ def addBookmark(hm,number):
     sql = '''INSERT INTO Bookmark(BookmarkTitle,SiteName,SiteDescription,Link,TweetID)
                VALUES(?,?,?,?,?)'''
     tweetID = getLatestTweet()
-    print(tweetID[0][0])
     if hm[number-1]['entities']['urls'] != []:
-        link = hm[number-1]['entities']['urls'][0]['url']
+        link = hm[number-1]['entities']['urls'][0]['expanded_url']
     else:
         link = 'No Link'
     data = ('Null','Null','Null',link,tweetID[0][0])
@@ -82,6 +81,14 @@ def getBookmarkData():
     
     return bookmarkTitle
 
+def getBookmarks():
+##    sql = '''SELECT TweetText,UserID, TweetID FROM Tweet'''
+##    sql2 = '''SELECT Link FROM Bookmark WHERE TweetID = ?'''
+##    sql3 = '''SELECT Username FROM User WHERE UserID = ?'''
+    sql = '''SELECT Tweet.TweetText,Tweet.UserID,Tweet.TweetID,Bookmark.Link,User.Username FROM
+             Tweet,User,Bookmark WHERE Bookmark.TweetID = Tweet.TweetID AND Tweet.UserID = User.UserID'''
+    tweetList = searchQuery(sql)
+    return tweetList
 
 if __name__ == '__main__':
     user = getUser(twitter)

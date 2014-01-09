@@ -27,6 +27,7 @@ def mainMenu():
     print('3. Print 10 latest Tweets')
     print('4. Add User to database')
     print('5. Print tweets from User in Database')
+    print('6. Show tweet database')
     print('0. Exit Application')
     print()
 
@@ -39,7 +40,10 @@ def HomeUserMenu():
     print()
 
 def getChoice():
-    choice = int(input('Select number: '))
+    try:
+        choice = int(input('Select number: '))
+    except ValueError:
+        print('Please enter an integer.')
     return choice
 
 def getConsumerKey():
@@ -127,6 +131,15 @@ def getYN():
     YN = YN.upper()
     return YN
 
+def displayBookmarks(List):
+    print('{0:<3}{1:<140}{2:<21}{3:<21}'.format(
+        'N.','Tweet Text','Link','Username'))
+    count = 0
+    while count < len(List):
+        print('{0:<3}{1:<140}{2:<25}{3:<25}'.format(
+            count+1,List[count][0],List[count][3],List[count][4]))
+        count += 1
+
 def checkingStuff():
     sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
     maxId = searchQuery(sql)
@@ -147,17 +160,17 @@ if __name__ == "__main__":
         choice = getChoice()
         if choice == 1:
             userTm = getUserTimeLine()
-        if choice == 2:
+        elif choice == 2:
             home_timeline = getHomeTimeline(twitter)
             hm = home_timeline
-        if choice == 3:
+        elif choice == 3:
             HomeUserMenu()
             HoMo = getChoice()
             if HoMo == 1:
                 displayLatestTweets(home_timeline,count)
             else:
                 displayLatestTweets(userTm,count)
-        if choice == 4:
+        elif choice == 4:
             databaseMenu()
             choice1 = getChoice()
             while choice1 != 0:
@@ -176,7 +189,7 @@ if __name__ == "__main__":
                     except:
                         print('An error occur\'d')
                     choice1 = 0
-        if choice == 5:
+        elif choice == 5:
             users = getUsersFromDatabase()
             displayUsers(users)
             Uchoice = getChoice()
@@ -187,7 +200,14 @@ if __name__ == "__main__":
                     Tnumber = getChoice()
                     addTweet(users,userTm,Tnumber,Uchoice)
                     addBookmark(userTm,Tnumber)
-        if choice == 9:
+                elif YN == 'N':
+                    Uchoice  = 0
+        elif choice == 6:
+            List = getBookmarks()
+            displayBookmarks(List)
+        elif choice == 9:
+            pass
+        else:
             pass
         
         
