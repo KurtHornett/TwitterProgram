@@ -20,15 +20,17 @@ def databaseMenu():
     print()
 
 def query(sql,data):
-    with sqlite3.connect('Bookmark_database-cli-test.db') as db:
+    with sqlite3.connect('Bookmark_database-cli-test-2.db') as db:
         cursor = db.cursor()
+        cursor.execute('PRAGMA foreign_keys = ON')
         cursor.execute(sql,data)
         db.commit()
 
-def searchQuery(sql):
-    with sqlite3.connect('Bookmark_database-cli-test.db') as db:
+def searchQuery(sql,data):
+    with sqlite3.connect('Bookmark_database-cli-test-2.db') as db:
         cursor = db.cursor()
-        cursor.execute(sql)
+        cursor.execute('PRAGMA foreign_keys = ON')
+        cursor.execute(sql,data)
         results = cursor.fetchall()
         return results
 
@@ -43,7 +45,7 @@ def getUser(twitter):
 def getUsersFromDatabase():
     sql = '''SELECT Username,ScreenName,UserID
                From User'''
-    users = searchQuery(sql)
+    users = searchQuery(sql,())
     return users
 
 def addUserFromSearch(userList):
@@ -74,11 +76,14 @@ def addBookmark(hm,number):
         link = 'No Link'
         bookmarkTitle,siteName,siteDesc = getBookmarkData(link)
     data = (bookmarkTitle,siteName,siteDesc,link,tweetID[0][0])
-    query(sql,data)
+    if checkAdd(data,tweetID):
+        query(sql,data)
+    else:
+        pass
 
 def getLatestTweet():
     sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
-    maxId = searchQuery(sql)
+    maxId = searchQuery(sql,())
     return maxId
 
 def getBookmarkData(link):
@@ -92,7 +97,6 @@ def getBookmarkData(link):
             url = urllib.request.urlopen(link) #Gets the data from the url
             html = url.read() #Converts HTTPRequest into text
             html = str(html) #Changes from 'bytes' to str so re will work
-            print(regex.search(html).group(1))
             siteName = regex.search(html).group(1)
             siteDesc = input('Please enter a short description of the site: ')
         except:
@@ -106,8 +110,34 @@ def getBookmarks():
 ##    sql3 = '''SELECT Username FROM User WHERE UserID = ?'''
     sql = '''SELECT Tweet.TweetText,Tweet.UserID,Tweet.TweetID,Bookmark.Link,User.Username FROM
              Tweet,User,Bookmark WHERE Bookmark.TweetID = Tweet.TweetID AND Tweet.UserID = User.UserID'''
-    tweetList = searchQuery(sql)
+    tweetList = searchQuery(sql,())
     return tweetList
+
+def deleteBookamrk(Dchoice):
+    sql = '''DELETE FROM Bookmark WHERE BookmarkID = ?'''
+    query(sql,(Dchoice,))
+    
+def checkAdd(data,tweetID):
+    print()
+    print('Are you sure you wish to add this bookamrk?')
+    print()
+    print('Title: {0}'.format(data[0]))
+    print('Site Name: {0}'.format(data[1]))
+    print('Site Description: {0}'.format(data[2]))
+    print('Link: {0}'.format(data[3]))
+    username = getIndieUser(tweetID)
+    print('User: {0}'.format(username))
+    print()
+    YN = getYN()
+    if YN == 'Y':
+        return True
+    else:
+        return False
+
+def getIndieUser(tweetID):
+    sql = '''SELECT Username FROM User,Tweet WHERE Tweet.? = User.UserID'''
+    username = searchQuery(sql,(tweetID[0][0],))
+    return username
 
 if __name__ == '__main__':
     user = getUser(twitter)

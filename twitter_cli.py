@@ -28,6 +28,7 @@ def mainMenu():
     print('4. Add User to database')
     print('5. Print tweets from User in Database')
     print('6. Show tweet database')
+    print('7. Delete tweet from database')
     print('0. Exit Application')
     print()
 
@@ -132,7 +133,7 @@ def getYN():
     return YN
 
 def displayBookmarks(List):
-    print('{0:<3}{1:<140}{2:<21}{3:<21}'.format(
+    print('{0:<3}{1:<140}{2:<25}{3:<21}'.format(
         'N.','Tweet Text','Link','Username'))
     count = 0
     while count < len(List):
@@ -205,6 +206,15 @@ if __name__ == "__main__":
         elif choice == 6:
             List = getBookmarks()
             displayBookmarks(List)
+        elif choice == 7:
+            List = getBookmarks()
+            displayBookmarks(List)
+            print()
+            print('Please Choose a bookamrk to delete, 0 to exit: ')
+            print()
+            Dchoice = getChoice()
+            if Dchoice != 0:
+                deleteBookamrk(Dchoice)
         elif choice == 9:
             pass
         else:
