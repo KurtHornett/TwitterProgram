@@ -126,17 +126,19 @@ def checkAdd(data,tweetID):
     print('Site Description: {0}'.format(data[2]))
     print('Link: {0}'.format(data[3]))
     username = getIndieUser(tweetID)
-    print('User: {0}'.format(username))
+    print('User: {0}'.format(username[0][0]))
     print()
-    YN = getYN()
-    if YN == 'Y':
+    YNadd = getYN()
+    print()
+    if YNadd == 'Y':
         return True
     else:
         return False
 
 def getIndieUser(tweetID):
-    sql = '''SELECT Username FROM User,Tweet WHERE Tweet.? = User.UserID'''
+    sql = '''SELECT Username FROM User,Tweet WHERE Tweet.TweetID = ? AND Tweet.UserID = User.UserID'''
     username = searchQuery(sql,(tweetID[0][0],))
+    print(username)
     return username
 
 if __name__ == '__main__':
