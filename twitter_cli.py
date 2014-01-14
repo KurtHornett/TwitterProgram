@@ -93,12 +93,13 @@ def displayLatestTweets(hm,count):
 
 def getUserTimeLine():
     try:
-        timeline = twitter.statuses.user_timeline(id=input('Please enter screen name: '))
+        timeline = twitter.statuses.user_timeline(id=input('Please enter screen name: ')) #Gets a users timeline from the API
         return timeline
     except:
         print('An error occured')
               
 def displayLinks(hm,count):
+    #Prints links as a table
     print('{0:<3} {1:<21}'.format('No.','Link'))
     while count < 10:
         if hm[count]['entities']['urls'] != []:
@@ -112,6 +113,7 @@ def displayUsers(users):
     print()
     print('Users in database')
     print()
+    #Prints the users in the list
     for user in users:
             print('{0:<3}{1:<21}'.format(count,user[0]))
             count += 1
@@ -128,18 +130,33 @@ def displayUsersTimeline(choice,users,twitter):
 
 
 def getYN():
-    YN = input('Save a tweet Y/N: ')
-    YN = YN.upper()
-    return YN
+    try:
+        YN = input('Commit Action (Y/N): ')
+        while YN not in ['y','n','Y','N']:
+            YN = input('Input Valid Option: ')
+        YN = YN.upper()
+        return YN
+    except:
+        print('An error occured')
 
 def displayBookmarks(List):
-    print('{0:<3}{1:<140}{2:<25}{3:<21}'.format(
-        'N.','Tweet Text','Link','Username'))
+    print('{0:<3}{1:<3}{2:<140}{3:<25}{4:<21}'.format(
+        'N.','ID','Tweet Text','Link','Username'))
     count = 0
     while count < len(List):
-        print('{0:<3}{1:<140}{2:<25}{3:<25}'.format(
-            count+1,List[count][0],List[count][3],List[count][4]))
+        print('{0:<3}{1:<3}{2:<140}{3:<25}{4:<25}'.format(
+            count+1,List[count][5],List[count][0],List[count][3],List[count][4]))
         count += 1
+
+def DisplaySingleBookmark(List):
+    print()
+    print('Bookmark Information')
+    print()
+    print('Title: {0}'.format(List[0][0]))
+    print('Site Name: {0}'.format(List[0][1]))
+    print('Description: {0}'.format(List[0][2]))
+    print('Link: {0}'.format(List[0][3]))
+    print()
 
 def checkingStuff():
     sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
@@ -159,6 +176,8 @@ if __name__ == "__main__":
     while choice != 0:
         mainMenu()
         choice = getChoice()
+        while choice not in [0,1,2,3,4,5,6,7,9]:
+            choice = getChoice()
         if choice == 1:
             userTm = getUserTimeLine()
         elif choice == 2:
@@ -210,15 +229,24 @@ if __name__ == "__main__":
             List = getBookmarks()
             displayBookmarks(List)
             print()
-            print('Please Choose a bookamrk to delete, 0 to exit: ')
+            print('Please Choose a Bookmark ID to delete, 0 to exit: ')
             print()
             Dchoice = getChoice()
             if Dchoice != 0:
-                deleteBookamrk(Dchoice)
+                BList = getDataBookmark(Dchoice)
+                DisplaySingleBookmark(BList)
+                DlYN = getYN()
+                if DlYN == 'Y':
+                    deleteBookamrk(Dchoice)
+                else:
+                    print('Bookmark not deleted')
+            else:
+                pass
         elif choice == 9:
             pass
         else:
             pass
-        
-        
     
+    
+
+

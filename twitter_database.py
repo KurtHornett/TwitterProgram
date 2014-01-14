@@ -108,7 +108,7 @@ def getBookmarks():
 ##    sql = '''SELECT TweetText,UserID, TweetID FROM Tweet'''
 ##    sql2 = '''SELECT Link FROM Bookmark WHERE TweetID = ?'''
 ##    sql3 = '''SELECT Username FROM User WHERE UserID = ?'''
-    sql = '''SELECT Tweet.TweetText,Tweet.UserID,Tweet.TweetID,Bookmark.Link,User.Username FROM
+    sql = '''SELECT Tweet.TweetText,Tweet.UserID,Tweet.TweetID,Bookmark.Link,User.Username,Bookmark.BookmarkID FROM
              Tweet,User,Bookmark WHERE Bookmark.TweetID = Tweet.TweetID AND Tweet.UserID = User.UserID'''
     tweetList = searchQuery(sql,())
     return tweetList
@@ -138,8 +138,14 @@ def checkAdd(data,tweetID):
 def getIndieUser(tweetID):
     sql = '''SELECT Username FROM User,Tweet WHERE Tweet.TweetID = ? AND Tweet.UserID = User.UserID'''
     username = searchQuery(sql,(tweetID[0][0],))
-    print(username)
     return username
+
+def getDataBookmark(choice):
+    sql = '''SELECT BookmarkTitle,SiteName,SiteDescription,Link FROM Bookmark
+             WHERE BookmarkID = ?'''
+    data = (choice,)
+    bookmarks = searchQuery(sql,data)
+    return bookmarks
 
 if __name__ == '__main__':
     user = getUser(twitter)
