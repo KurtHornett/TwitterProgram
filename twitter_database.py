@@ -147,6 +147,9 @@ def getDataBookmark(choice):
     bookmarks = searchQuery(sql,data)
     return bookmarks
 
+def ModifyBookmark():
+    pass
+
 if __name__ == '__main__':
     user = getUser(twitter)
     addUserFromSearch(user)

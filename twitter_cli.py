@@ -28,7 +28,8 @@ def mainMenu():
     print('4. Add User to database')
     print('5. Print tweets from User in Database')
     print('6. Show tweet database')
-    print('7. Delete tweet from database')
+    print('7. Delete bookmark from database')
+    print('8. Modify bookmark')
     print('0. Exit Application')
     print()
 
@@ -176,7 +177,7 @@ if __name__ == "__main__":
     while choice != 0:
         mainMenu()
         choice = getChoice()
-        while choice not in [0,1,2,3,4,5,6,7,9]:
+        while choice not in [0,1,2,3,4,5,6,7,8,99]:
             choice = getChoice()
         if choice == 1:
             userTm = getUserTimeLine()
@@ -242,7 +243,9 @@ if __name__ == "__main__":
                     print('Bookmark not deleted')
             else:
                 pass
-        elif choice == 9:
+        elif choice == 8:
+            pass
+        elif choice == 99:
             pass
         else:
             pass
