@@ -27,10 +27,13 @@ def mainMenu():
     print('3. Print 10 latest Tweets')
     print('4. Add User to database')
     print('5. Print tweets from User in Database')
-    print('6. Show tweet database')
-    print('7. Delete bookmark from database')
-    print('8. Modify bookmark')
+    print('6. Show Bookmark database')
+    print('7. Display Single Bookmark')
+    print('8. Delete bookmark from database')
+    print('9. Modify bookmark')
     print('0. Exit Application')
+    print()
+    print('Use \'0\' to exit to here anywhere in the program')
     print()
 
 def HomeUserMenu():
@@ -149,6 +152,12 @@ def displayBookmarks(List):
             count+1,List[count][5],List[count][0],List[count][3],List[count][4]))
         count += 1
 
+def createIDlist(List):
+    IDlist = []
+    for count in range(len(List)):
+        IDlist.append(List[count][5])
+    return IDlist
+
 def DisplaySingleBookmark(List):
     print()
     print('Bookmark Information')
@@ -159,10 +168,29 @@ def DisplaySingleBookmark(List):
     print('Link: {0}'.format(List[0][3]))
     print()
 
-def checkingStuff():
-    sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
-    maxId = searchQuery(sql)
-    return maxId
+def displayModifyChoices():
+    print()
+    print('What to modify?')
+    print()
+    print('1. Bookmark Title')
+    print('2. Site Name')
+    print('3. Site Description')
+    print('4. Link')
+    print()
+
+def getChanges():
+    changes = input('Please enter new data: ')
+    while changes == '':
+        changes = input('Some data must be entered: ')
+    return changes
+
+def checkingStuff(twitter):
+    suggUsers = twitter.users.suggestions.technology.members()
+    count = 0
+    while count < len(suggUsers):
+        print(suggUsers[count]['name'])
+        count += 1
+    #print(suggUsers)
 
 if __name__ == "__main__":
     #Consumer key required regardless
@@ -177,7 +205,7 @@ if __name__ == "__main__":
     while choice != 0:
         mainMenu()
         choice = getChoice()
-        while choice not in [0,1,2,3,4,5,6,7,8,99]:
+        while choice not in [0,1,2,3,4,5,6,7,8,9,99]:
             choice = getChoice()
         if choice == 1:
             userTm = getUserTimeLine()
@@ -227,6 +255,15 @@ if __name__ == "__main__":
             List = getBookmarks()
             displayBookmarks(List)
         elif choice == 7:
+            Bookmarks = getBookmarks()
+            displayBookmarks(Bookmarks)
+            BookChoice = getChoice()
+            while BookChoice > len(Bookmarks):
+                print('Please choose integer in list: ')
+                BookChoice = getChoice()
+            SingleBookmark = getDataBookmark(BookChoice)
+            DisplaySingleBookmark(SingleBookmark)
+        elif choice == 8:
             List = getBookmarks()
             displayBookmarks(List)
             print()
@@ -243,10 +280,25 @@ if __name__ == "__main__":
                     print('Bookmark not deleted')
             else:
                 pass
-        elif choice == 8:
-            pass
+        elif choice == 9:
+            Bookmarks = getBookmarks()
+            displayBookmarks(Bookmarks)
+            Mchoice = getChoice()
+            IDlist = createIDlist(Bookmarks)
+            while Mchoice not in IDlist:
+                Mchoice = getChoice()
+            if Mchoice != 0:
+                SingleBookmark = getDataBookmark(Mchoice)
+                DisplaySingleBookmark(SingleBookmark)
+                displayModifyChoices()
+                ModChoice = getChoice()
+                while ModChoice not in [0,1,2,3,4]:
+                    ModChoice = getChoice()
+                if ModChoice != 0:
+                    changes = getChanges()
+                    ModifyBookmark(Mchoice, ModChoice, changes)
         elif choice == 99:
-            pass
+            checkingStuff(twitter)
         else:
             pass
     

@@ -147,8 +147,25 @@ def getDataBookmark(choice):
     bookmarks = searchQuery(sql,data)
     return bookmarks
 
-def ModifyBookmark():
-    pass
+def ModifyBookmark(Mchoice,ModChoice,changes):
+    if ModChoice == 1:
+        sql = '''UPDATE Bookmark
+                 SET BookmarkTitle = ?
+                 WHERE BookmarkID = ?'''
+    elif ModChoice == 2:
+        sql = '''UPDATE Bookmark
+                 SET SiteName = ?
+                 WHERE BookmarkID = ?'''
+    elif ModChoice == 3:
+        sql = '''UPDATE Bookmark
+                 SET SiteDescription = ?
+                 WHERE BookmarkID = ?'''
+    elif ModChoice == 4:
+        sql = '''UPDATE Bookmark
+                 SET Link = ?
+                 WHERE BookmarkID = ?'''
+    data = (changes,Mchoice)
+    query(sql,data)
 
 if __name__ == '__main__':
     user = getUser(twitter)
