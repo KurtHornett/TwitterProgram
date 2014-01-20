@@ -27,7 +27,7 @@ def create_database(db_name,table_name,sql):
 
 if __name__ == "__main__":
     
-    db_name = "Bookmark_Database-cli-test-2.db"
+    db_name = "Bookmark_Database.db"
     sql = """CREATE TABLE User
              (UserID INTEGER,
              UserName TEXT,

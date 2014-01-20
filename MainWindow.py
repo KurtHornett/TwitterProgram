@@ -9,6 +9,10 @@ from SearchWindow import *
 from BookmarkTool import *
 from TableView import *
 
+#CLI Modules
+from twitter_cli import *
+from twitter_database import *
+
 import sys
 
 class MainWindow(QMainWindow):
@@ -17,10 +21,13 @@ class MainWindow(QMainWindow):
         #Set Window Title
         self.setWindowTitle('Twitter Program')
 
+        #Create Twitter Object
+        self.createTwitterObject()
+
         #Create Menubar for interface - Add Each Menu
         self.menuBar = QMenuBar()
         self.fileMenu = self.menuBar.addMenu('File')
-        self.searchMenu = self.menuBar.addMenu('Search')
+        self.searchMenu = self.menuBar.addMenu('Search for User')
         self.managementMenu = self.menuBar.addMenu('Database Management')
         self.suggestedMenu = self.menuBar.addMenu('Suggested Users')
         self.trendsMenu = self.menuBar.addMenu('Display Trends')
@@ -39,7 +46,7 @@ class MainWindow(QMainWindow):
         self.setMenuBar(self.menuBar)
 
         #Import Layouts
-        self.searchInterface = SearchWindow()
+        self.searchInterface = SearchWindow(self.twitter)
         self.bookmarkInterface = BookmarkWindow()
         self.tableInterface = TableViewWindow()
 
@@ -76,8 +83,16 @@ class MainWindow(QMainWindow):
     def modifyBookmarks(self):
         self.layout.setCurrentWidget(self.tableInterface.tableWidget)
         self.setWindowTitle('Modify Database')
-
-
+    def createTwitterObject(self):
+        consumer_key = getConsumerKey()
+        MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
+        if not os.path.exists(MY_TWITTER_CREDS):
+            oauth_dance("KurtsApp",'Y4zkic6lw0Hu6uB3sNVH4Q', consumer_key,
+                        MY_TWITTER_CREDS)
+        oauth_token, oauth_secret = read_token_file(MY_TWITTER_CREDS)
+        #Creation of twitter object with authorized detailes.
+        self.twitter = Twitter(auth=OAuth(
+            oauth_token, oauth_secret, 'Y4zkic6lw0Hu6uB3sNVH4Q', consumer_key))
     def quit_(self):
         window.close()
         

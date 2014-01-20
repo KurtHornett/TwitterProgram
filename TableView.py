@@ -17,9 +17,7 @@ class TableViewWindow(QMainWindow):
         self.setWindowTitle('Database Management')
 
         #Open and connect database
-        self.db = QSqlDatabase.addDatabase('QSQLITE')
-        self.db.setDatabaseName('Bookmark_Database.db')
-        self.db.open()
+        self.createConnectedDatabase()
 
         #Create Table View & Buttons
         self.tableView = QTableView()
@@ -46,6 +44,12 @@ class TableViewWindow(QMainWindow):
         self.model.setTable('Bookmark')
         self.tableView.setModel(self.model)
         self.tableView.model().select()
+
+    def createConnectedDatabase(self):
+        self.db = QSqlDatabase.addDatabase('QSQLITE')
+        self.db.setDatabaseName('Bookmark_Database.db')
+        self.db.open()
+
 
 
 if __name__ == '__main__':
