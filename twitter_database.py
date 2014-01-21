@@ -93,7 +93,7 @@ def getBookmarkData(link):
     if link != 'No Link':
         try:
             #Create RE for finding title
-            regex = re.compile('<title>(.+?)</title>')
+            regex = re.compile('<title>(.*?)</title>')
             url = urllib.request.urlopen(link) #Gets the data from the url
             html = url.read() #Converts HTTPRequest into text
             html = str(html) #Changes from 'bytes' to str so re will work
@@ -102,6 +102,7 @@ def getBookmarkData(link):
         except:
             print()
             print('No HTML Title Found')
+            print()
     return bookmarkTitle,siteName,siteDesc
 
 def getBookmarks():

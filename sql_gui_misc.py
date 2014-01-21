@@ -11,6 +11,7 @@ def databaseUserList():
     data = ()
     users = textQuery(sql,data)
     return users
+
 def textQuery(sql,data):
     with sqlite3.connect('Bookmark_database.db') as db:
         cursor = db.cursor()

@@ -60,21 +60,36 @@ class SearchWindow(QMainWindow):
 
     def searchUser(self):
         #Allows for searching for a user from Twitter and then ading to Database
-        print(self.twitter)
         if self.searchLineEdit.text() != '':
             search = self.searchLineEdit.text()
             self.userList = self.twitter.users.lookup(screen_name=search)
             users = databaseUserList()
             check = False
             for users in users:
-                if users[1] == userList[0]['screen_name']:
+                if users[1] == self.userList[0]['screen_name']:
                     check = True
             if check == False:
-                print(self.userList)
+                self.createQueryModel()
             else:
                 error = QMessageBox()
                 error.setText('User already in database, did not add.')
+                error.setWindowTitle('Error Message')
                 error.exec_()
+        else:
+            error = QMessageBox()
+            error.setText('Search Field must not be empty')
+            error.setWindowTitle('Error Message')
+            error.exec_()
+                
+    def createQueryModel(self):
+        query = QSqlQuery()
+        query.prepare('''INSERT INTO User(UserName,ScreenName)
+               VALUES(?,?)''')
+        query.addBindValue(self.userList[0]['name'])
+        query.addBindValue(self.userList[0]['screen_name'])
+        query.exec_()
+        self.model.setQuery(query)
+        self.createTableModel()
             
 
 if __name__ == '__main__':

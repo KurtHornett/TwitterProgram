@@ -1,5 +1,6 @@
 # Kurt Hornett
 # Main Interface
+# Implemetation
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -8,6 +9,7 @@ from PyQt4.QtSql import *
 from SearchWindow import *
 from BookmarkTool import *
 from TableView import *
+from TweetInterface import *
 
 #CLI Modules
 from twitter_cli import *
@@ -27,7 +29,7 @@ class MainWindow(QMainWindow):
         #Create Menubar for interface - Add Each Menu
         self.menuBar = QMenuBar()
         self.fileMenu = self.menuBar.addMenu('File')
-        self.searchMenu = self.menuBar.addMenu('Search for User')
+        self.searchMenu = self.menuBar.addMenu('Search')
         self.managementMenu = self.menuBar.addMenu('Database Management')
         self.suggestedMenu = self.menuBar.addMenu('Suggested Users')
         self.trendsMenu = self.menuBar.addMenu('Display Trends')
@@ -36,6 +38,7 @@ class MainWindow(QMainWindow):
         self.logOutAction = self.fileMenu.addAction('Log Out')
         self.quitAction = self.fileMenu.addAction('Quit')
         self.searchAction = self.searchMenu.addAction('New Search')
+        self.tweetAction = self.searchMenu.addAction('Search Users Tweets')
         self.addAction = self.managementMenu.addAction('Add Bookmark')
         self.deleteAction = self.managementMenu.addAction('Delete Entries')
         self.modifyAction = self.managementMenu.addAction('Modity Databases')
@@ -49,12 +52,14 @@ class MainWindow(QMainWindow):
         self.searchInterface = SearchWindow(self.twitter)
         self.bookmarkInterface = BookmarkWindow()
         self.tableInterface = TableViewWindow()
+        self.tweetSearchInterface = TweetInterface()
 
         #Create Layout
         self.layout = QStackedLayout()
         self.layout.addWidget(self.searchInterface.searchWidget)
         self.layout.addWidget(self.bookmarkInterface.bookmarkWidget)
         self.layout.addWidget(self.tableInterface.tableWidget)
+        self.layout.addWidget(self.tweetSearchInterface.tweetWidget)
 
         #Set Main Widget
         self.widget = QWidget()
@@ -63,6 +68,7 @@ class MainWindow(QMainWindow):
 
         #Add Action Actions
         self.searchAction.triggered.connect(self.newSearch)
+        self.tweetAction.triggered.connect(self.tweetSearch)
         self.addAction.triggered.connect(self.addBookmark)
         self.modifyAction.triggered.connect(self.modifyBookmarks)
         self.quitAction.triggered.connect(self.quit_)
@@ -74,6 +80,9 @@ class MainWindow(QMainWindow):
     def newSearch(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
         self.setWindowTitle('New Search')
+    def tweetSearch(self):
+        self.layout.setCurrentWidget(self.tweetSearchInterface.tweetWidget)
+        self.setWindowTitle('Tweet Search Interface')
     def addBookmark(self):
         self.layout.setCurrentWidget(self.bookmarkInterface.bookmarkWidget)
         self.setWindowTitle('Add Bookamrk')
