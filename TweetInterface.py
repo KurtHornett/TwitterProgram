@@ -6,6 +6,9 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
+from twitter_database import *
+from sql_gui_misc import *
+
 import sys
 
 class TweetInterface(QMainWindow):
@@ -14,12 +17,19 @@ class TweetInterface(QMainWindow):
         #Set Window Titile
         self.setWindowTitle('Show User Tweets')
 
+        #Create Tweet Layout
+        self.tweetLayout = QVBoxLayout()
+
+        #Add 
+        
+
         #Create Menu
         self.usersButton = QPushButton('Users Menu')
         self.usersMenu = QMenu()
 
-        #Add Action
-        self.usersMenu.addAction('Test Action').triggered.connect(self.showMenu)
+        #Add Actions
+        self.getUsersNumber()
+        self.addActions()
         self.usersMenu.setTitle('Users Menu')
 
         #Create Layout
@@ -40,7 +50,22 @@ class TweetInterface(QMainWindow):
 
     def showMenu(self):
         self.usersMenu.exec_(QCursor.pos())
+        print(self.sender().text())
+        if self.sender() in self.actionsList:
+            print('Yes')
 
+    def printUser(self):
+        pass
+
+    def getUsersNumber(self):
+        self.userList = getUsersFromDatabaseGUI()
+        self.userNumber = len(self.userList)
+
+    def addActions(self):
+        for count in range(self.userNumber):
+            self.usersMenu.addAction('{0}'.format(self.userList[count][0])).triggered.connect(self.showMenu)
+        self.actionsList = self.usersMenu.actions()
+        
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

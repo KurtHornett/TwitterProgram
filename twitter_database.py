@@ -19,15 +19,15 @@ def databaseMenu():
     print('1. Add User to database')
     print()
 
-def query(sql,data):
-    with sqlite3.connect('Bookmark_database-cli-test-2.db') as db:
+def query(sql,data,db):
+    with sqlite3.connect(db) as db:
         cursor = db.cursor()
         cursor.execute('PRAGMA foreign_keys = ON')
         cursor.execute(sql,data)
         db.commit()
 
-def searchQuery(sql,data):
-    with sqlite3.connect('Bookmark_database-cli-test-2.db') as db:
+def searchQuery(sql,data,db):
+    with sqlite3.connect(db) as db:
         cursor = db.cursor()
         cursor.execute('PRAGMA foreign_keys = ON')
         cursor.execute(sql,data)
@@ -45,25 +45,29 @@ def getUser(twitter):
 def getUsersFromDatabase():
     sql = '''SELECT Username,ScreenName,UserID
                From User'''
-    users = searchQuery(sql,())
+    db = 'Bookmark_Database-cli-test-2.db'
+    users = searchQuery(sql,(),db)
     return users
 
 def addUserFromSearch(userList):
     sql = '''INSERT INTO User(UserName,ScreenName)
                VALUES(?,?)'''
     data = (userList[0]['name'],userList[0]['screen_name'])
-    query(sql,data)
+    db = 'Bookmark_Database-cli-test-2.db'
+    query(sql,data,db)
 
 def addUserFromTweet(hm,number):
     sql = '''INSERT INTO User(UserName,ScreenName)
                Values(?,?)'''
     data = (hm[number]['user']['name'],hm[number]['user']['screen_name'])
-    query(sql,data)
+    db = 'Bookmark_Database-cli-test-2.db'
+    query(sql,data,db)
 
 def addTweet(Users,UserTm,Tnumber,Uchoice):
     sql = '''INSERT INTO Tweet(TweetText,UserID) VALUES(?,?)'''
     data = (UserTm[Tnumber-1]['text'],Users[Uchoice-1][2])
-    query(sql,data)
+    db = 'Bookmark_Database-cli-test-2.db'
+    query(sql,data,db)
 
 def addBookmark(hm,number):
     sql = '''INSERT INTO Bookmark(BookmarkTitle,SiteName,SiteDescription,Link,TweetID)
@@ -76,14 +80,16 @@ def addBookmark(hm,number):
         link = 'No Link'
         bookmarkTitle,siteName,siteDesc = getBookmarkData(link)
     data = (bookmarkTitle,siteName,siteDesc,link,tweetID[0][0])
+    db = 'Bookmark_Database-cli-test-2.db'
     if checkAdd(data,tweetID):
-        query(sql,data)
+        query(sql,data,db)
     else:
         pass
 
 def getLatestTweet():
     sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
-    maxId = searchQuery(sql,())
+    db = 'Bookmark_Database-cli-test-2.db'
+    maxId = searchQuery(sql,(),db)
     return maxId
 
 def getBookmarkData(link):
@@ -111,12 +117,14 @@ def getBookmarks():
 ##    sql3 = '''SELECT Username FROM User WHERE UserID = ?'''
     sql = '''SELECT Tweet.TweetText,Tweet.UserID,Tweet.TweetID,Bookmark.Link,User.Username,Bookmark.BookmarkID FROM
              Tweet,User,Bookmark WHERE Bookmark.TweetID = Tweet.TweetID AND Tweet.UserID = User.UserID'''
-    tweetList = searchQuery(sql,())
+    db = 'Bookmark_Database-cli-test-2.db'
+    tweetList = searchQuery(sql,(),db)
     return tweetList
 
 def deleteBookamrk(Dchoice):
     sql = '''DELETE FROM Bookmark WHERE BookmarkID = ?'''
-    query(sql,(Dchoice,))
+    db = 'Bookmark_Database-cli-test-2.db'
+    query(sql,(Dchoice,),db)
     
 def checkAdd(data,tweetID):
     print()
@@ -138,14 +146,16 @@ def checkAdd(data,tweetID):
 
 def getIndieUser(tweetID):
     sql = '''SELECT Username FROM User,Tweet WHERE Tweet.TweetID = ? AND Tweet.UserID = User.UserID'''
-    username = searchQuery(sql,(tweetID[0][0],))
+    db = 'Bookmark_Database-cli-test-2.db'
+    username = searchQuery(sql,(tweetID[0][0],),db)
     return username
 
 def getDataBookmark(choice):
     sql = '''SELECT BookmarkTitle,SiteName,SiteDescription,Link FROM Bookmark
              WHERE BookmarkID = ?'''
     data = (choice,)
-    bookmarks = searchQuery(sql,data)
+    db = 'Bookmark_Database-cli-test-2.db'
+    bookmarks = searchQuery(sql,data,db)
     return bookmarks
 
 def ModifyBookmark(Mchoice,ModChoice,changes):
@@ -166,7 +176,8 @@ def ModifyBookmark(Mchoice,ModChoice,changes):
                  SET Link = ?
                  WHERE BookmarkID = ?'''
     data = (changes,Mchoice)
-    query(sql,data)
+    db = 'Bookmark_Database-cli-test-2.db'
+    query(sql,data,db)
 
 if __name__ == '__main__':
     user = getUser(twitter)

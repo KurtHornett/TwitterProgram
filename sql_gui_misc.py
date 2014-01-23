@@ -19,3 +19,10 @@ def textQuery(sql,data):
         cursor.execute(sql,data)
         results = cursor.fetchall()
     return results
+
+def getUsersFromDatabaseGUI():
+    sql = '''SELECT Username,ScreenName,UserID
+               From User'''
+    db = 'Bookmark_Database.db'
+    users = textQuery(sql,())
+    return users

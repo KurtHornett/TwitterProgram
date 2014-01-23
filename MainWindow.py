@@ -80,6 +80,7 @@ class MainWindow(QMainWindow):
     def newSearch(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
         self.setWindowTitle('New Search')
+        print(self.searchAction.text())
     def tweetSearch(self):
         self.layout.setCurrentWidget(self.tweetSearchInterface.tweetWidget)
         self.setWindowTitle('Tweet Search Interface')
