@@ -52,14 +52,14 @@ class MainWindow(QMainWindow):
         self.searchInterface = SearchWindow(self.twitter)
         self.bookmarkInterface = BookmarkWindow()
         self.tableInterface = TableViewWindow()
-        self.tweetSearchInterface = TweetInterface()
+        self.tweetSearchInterface = TweetInterface(self.twitter)
 
         #Create Layout
         self.layout = QStackedLayout()
         self.layout.addWidget(self.searchInterface.searchWidget)
         self.layout.addWidget(self.bookmarkInterface.bookmarkWidget)
         self.layout.addWidget(self.tableInterface.tableWidget)
-        self.layout.addWidget(self.tweetSearchInterface.tweetWidget)
+        self.layout.addWidget(self.tweetSearchInterface.tweetsWidget)
 
         #Set Main Widget
         self.widget = QWidget()
@@ -80,9 +80,8 @@ class MainWindow(QMainWindow):
     def newSearch(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
         self.setWindowTitle('New Search')
-        print(self.searchAction.text())
     def tweetSearch(self):
-        self.layout.setCurrentWidget(self.tweetSearchInterface.tweetWidget)
+        self.layout.setCurrentWidget(self.tweetSearchInterface.tweetsWidget)
         self.setWindowTitle('Tweet Search Interface')
     def addBookmark(self):
         self.layout.setCurrentWidget(self.bookmarkInterface.bookmarkWidget)
