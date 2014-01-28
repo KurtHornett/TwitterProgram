@@ -22,16 +22,17 @@ def mainMenu():
     print()
     print('Twitter Management Program')
     print()
-    print('1. Get a Users Time Line')
-    print('2. Get Home Timeline')
-    print('3. Print 10 latest Tweets')
-    print('4. Add User to database')
-    print('5. Print tweets from User in Database')
-    print('6. Show Bookmark database')
-    print('7. Display Single Bookmark')
-    print('8. Delete bookmark from database')
-    print('9. Modify bookmark')
-    print('0. Exit Application')
+    print(' 1. Get a Users Time Line')
+    print(' 2. Get Home Timeline')
+    print(' 3. Print 10 latest Tweets')
+    print(' 4. Add User to database')
+    print(' 5. Print tweets from User in Database')
+    print(' 6. Show Bookmark database')
+    print(' 7. Display Single Bookmark')
+    print(' 8. Delete bookmark from database')
+    print(' 9. Modify bookmark')
+    print('10. Display Suggested Users')
+    print(' 0. Exit Application')
     print()
     print('Use \'0\' to exit to here anywhere in the program')
     print()
@@ -184,11 +185,95 @@ def getChanges():
         changes = input('Some data must be entered: ')
     return changes
 
+def displaySlugs():
+    suggUserSlugs = ['News','Technology','Business']
+    count = 0
+    print()
+    print('Please select the Catergry to get Suggested Users From.')
+    print()
+    while count < len(suggUserSlugs):
+        print('{0}. {1}'.format(count+1,suggUserSlugs[count]))
+        count += 1
+    print()
+
+def displaySuggestedUsers(suggUsers,twitter):
+    count = 0
+    print()
+    print('Here are the selected users')
+    print()
+    while count < len(suggUsers):
+        print('{0}. {1}'.format(count+1,suggUsers[count]['name']))
+        count += 1
+    print()
+    SuggUserChoice = getChoice()
+    if SuggUserChoice != 0:
+        FAChoice = chooseFollowAdd()
+        if FAChoice != 0:
+            FollowAddUser(FAChoice,SuggUserChoice,suggUsers,twitter)
+
+def FollowAddUser(FAChoice,SuggUserChoice,SuggUsers,twitter):
+    if FAChoice == 1:
+        twitter.friendships.create(id=SuggUsers[SuggUserChoice-1]['screen_name'])
+        print('User Followed')
+    elif FAChoice == 2:
+        userList = []
+        userList.append(SuggUsers[SuggUserChoice-1])
+        users = getUsersFromDatabase()
+        check=False
+        for users in users:
+            if users[1] == SuggUsers[SuggUserChoice-1]['screen_name']:
+                check = True
+        if check == False:
+            addUserFromSearch(userList)
+            print('User Added')
+        else:
+            print('User already exits, not added')
+    elif FAChoice == 3:
+        twitter.friendships.create(id=SuggUsers[SuggUserChoice-1]['screen_name'])
+        userList = []
+        userList.append(SuggUsers[SuggUserChoice-1])
+        users = getUsersFromDatabase()
+        check=False
+        for users in users:
+            if users[1] == SuggUsers[SuggUserChoice-1]['screen_name']:
+                    check = True
+            if check == False:
+                addUserFromSearch(userList)
+            else:
+                print('User already exits, not added')
+        print('User Added & Followed')
+    else:
+        print('Nothing Happened')
+
+def displayForSuggUsers(twitter,choice):
+    if choice == 1:
+        suggUsers = twitter.users.suggestions.news.members()
+        displaySuggestedUsers(suggUsers,twitter)
+    elif choice == 2:
+        suggUsers = twitter.users.suggestions.technology.members()
+        displaySuggestedUsers(suggUsers,twitter)
+    elif choice == 3:
+        suggUsers = twitter.users.suggestion.business.members()
+        displaySuggestedUsers(suggUsers,twitter)
+    else:
+        print('Invalid Choice')
+
+def chooseFollowAdd():
+    print()
+    print('Would you like to follow or add a user?')
+    print()
+    print('1. Follow')
+    print('2. Add to Database')
+    print('3. Both')
+    print()
+    choice = getChoice()
+    return choice
+
 def checkingStuff(twitter):
-    suggUsers = twitter.users.suggestions.technology.members()
+    suggUsers = twitter.users.suggestions.news.members()
     count = 0
     while count < len(suggUsers):
-        print(suggUsers[count]['name'])
+        print(suggUsers[count]['screen_name'])
         count += 1
     #print(suggUsers)
 
@@ -205,7 +290,7 @@ if __name__ == "__main__":
     while choice != 0:
         mainMenu()
         choice = getChoice()
-        while choice not in [0,1,2,3,4,5,6,7,8,9,99]:
+        while choice not in [0,1,2,3,4,5,6,7,8,9,10,99]:
             choice = getChoice()
         if choice == 1:
             userTm = getUserTimeLine()
@@ -297,6 +382,10 @@ if __name__ == "__main__":
                 if ModChoice != 0:
                     changes = getChanges()
                     ModifyBookmark(Mchoice, ModChoice, changes)
+        elif choice == 10:
+            displaySlugs()
+            SuggChoice = getChoice()
+            displayForSuggUsers(twitter,SuggChoice) 
         elif choice == 99:
             checkingStuff(twitter)
         else:
