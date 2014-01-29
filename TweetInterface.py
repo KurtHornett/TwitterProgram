@@ -21,8 +21,9 @@ class TweetInterface(QMainWindow):
 
         #Create Tweet Layout
         self.tweetLayout = QGridLayout()
+        self.helpLabel = QLabel('Please select one if the users tweets.')
         self.returnButton = QPushButton('Return')
-        self.tweetLayout.addWidget(self.returnButton,1,0)
+        self.tweetLayout.addWidget(self.helpLabel,0,0)
 
         #Create Menu
         self.usersButton = QPushButton('Users Menu')
@@ -81,10 +82,14 @@ class TweetInterface(QMainWindow):
 
     def displayTweet(self):
         self.timeline = self.twitter.statuses.user_timeline(id=self.userList[self.userChoice][1])
-        self.singleTweetLayout = QTextEdit()
-        self.singleTweetLayout.setText(self.timeline[0]['text'])
-        self.singleTweetLayout.setReadOnly(True)
-        self.tweetLayout.addWidget(self.singleTweetLayout,0,0)
+        count = 0
+        while count < 10:
+            self.singleTweetLayout = QTextEdit()
+            self.singleTweetLayout.setText(self.timeline[count]['text'])
+            self.singleTweetLayout.setReadOnly(True)
+            self.tweetLayout.addWidget(self.singleTweetLayout,count+1,0)
+            count += 1
+        self.tweetLayout.addWidget(self.returnButton,count+2,0)
         self.mainLayout.setCurrentWidget(self.tweetWidget)
 
     def getUsersNumber(self):
