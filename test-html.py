@@ -13,7 +13,7 @@ class myHTMLParser(HTMLParser):
 url = urllib.request.urlopen('http://gov.uk')
 html = url.read()
 html = str(html)
-regex = re.compile('<title>(.+?)</title>')
+regex = re.compile('<title>(.*?)</title>')
 print(regex.search(html).group(1))
 
 ##parser = myHTMLParser(strict=False)
