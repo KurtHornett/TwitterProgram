@@ -43,7 +43,6 @@ class TweetInterface(QMainWindow):
         #Create Stacked Layout
         self.userWidget = QWidget()
         self.userWidget.setLayout(self.userLayout)
-        self.tweetWidget = QWidget()
         self.tweetWidget.setLayout(self.tweetLayout)
         self.mainLayout = QStackedLayout()
         self.mainLayout.addWidget(self.userWidget)
@@ -89,6 +88,8 @@ class TweetInterface(QMainWindow):
             self.singleTweetLayout.setReadOnly(True)
             self.tweetLayout.addWidget(self.singleTweetLayout,count+1,0)
             count += 1
+        for counter in range(count):
+            self.tweetLayout.setRowMinimumHeight(counter,5)
         self.tweetLayout.addWidget(self.returnButton,count+2,0)
         self.mainLayout.setCurrentWidget(self.tweetWidget)
 
