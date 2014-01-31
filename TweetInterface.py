@@ -43,6 +43,7 @@ class TweetInterface(QMainWindow):
         #Create Stacked Layout
         self.userWidget = QWidget()
         self.userWidget.setLayout(self.userLayout)
+        self.tweetWidget = QWidget()
         self.tweetWidget.setLayout(self.tweetLayout)
         self.mainLayout = QStackedLayout()
         self.mainLayout.addWidget(self.userWidget)
@@ -81,17 +82,32 @@ class TweetInterface(QMainWindow):
 
     def displayTweet(self):
         self.timeline = self.twitter.statuses.user_timeline(id=self.userList[self.userChoice][1])
+##        count = 0
+##        while count < 10:
+##            self.singleTweetLayout = QTextEdit()
+##            self.singleTweetLayout.setText(self.timeline[count]['text'])
+##            self.singleTweetLayout.setReadOnly(True)
+##            self.tweetLayout.addWidget(self.singleTweetLayout,count+1,0)
+##            count += 1
+##        for counter in ra,,nge(count):
+##            self.tweetLayout.setRowMinimumHeight(counter,5)
+        self.tweetLayout.addWidget(self.returnButton,2,0)
+##        self.mainLayout.setCurrentWidget(self.tweetWidget)
+        self.tweetTableWidget = QTableWidget(10,2)
+        tweetListLabels = ['Username','Tweet Text']
+        self.tweetTableWidget.setHorizontalHeaderLabels(tweetListLabels)
+        tweetTextList = []
         count = 0
+        self.tweetTableWidget.setSortingEnabled(False)
         while count < 10:
-            self.singleTweetLayout = QTextEdit()
-            self.singleTweetLayout.setText(self.timeline[count]['text'])
-            self.singleTweetLayout.setReadOnly(True)
-            self.tweetLayout.addWidget(self.singleTweetLayout,count+1,0)
+            newTableWidget = QTableWidgetItem(self.timeline[count]['text'])
+            self.tweetTableWidget.setItem(count,1,newTableWidget)
+            userTableWidget = QTableWidgetItem(self.userList[self.userChoice][1])
+            self.tweetTableWidget.setItem(count,0,userTableWidget)
             count += 1
-        for counter in range(count):
-            self.tweetLayout.setRowMinimumHeight(counter,5)
-        self.tweetLayout.addWidget(self.returnButton,count+2,0)
+        self.tweetLayout.addWidget(self.tweetTableWidget,1,0)
         self.mainLayout.setCurrentWidget(self.tweetWidget)
+        
 
     def getUsersNumber(self):
         self.userList = getUsersFromDatabaseGUI()
