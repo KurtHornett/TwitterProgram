@@ -25,6 +25,7 @@ class BookmarkWindow(QMainWindow):
         #Create Line Edits
         self.titleLineEdit = QLineEdit()
         self.linkLineEdit = QLineEdit()
+        self.linkLineEdit.setReadOnly(True)
         self.siteNameLineEdit = QLineEdit()
         self.siteDescLineEdit = QLineEdit()
 
@@ -47,6 +48,9 @@ class BookmarkWindow(QMainWindow):
         self.bookmarkWidget = QWidget()
         self.bookmarkWidget.setLayout(self.BookmarkLayout)
         self.setCentralWidget(self.bookmarkWidget)
+
+        def setData(self):
+            pass
 
 
 

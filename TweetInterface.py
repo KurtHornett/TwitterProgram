@@ -8,6 +8,7 @@ from PyQt4.QtSql import *
 
 from twitter_database import *
 from sql_gui_misc import *
+from BookmarkTool import *
 
 import sys
 
@@ -21,9 +22,10 @@ class TweetInterface(QMainWindow):
 
         #Create Tweet Layout
         self.tweetLayout = QGridLayout()
-        self.helpLabel = QLabel('Please select one if the users tweets.')
+        self.helpLabel = QLabel('Please select one of the users tweets.')
         self.returnButton = QPushButton('Return')
         self.tweetLayout.addWidget(self.helpLabel,0,0)
+        self.selectTweetButton = QPushButton('Select Tweet')
 
         #Create Menu
         self.usersButton = QPushButton('Users Menu')
@@ -60,6 +62,7 @@ class TweetInterface(QMainWindow):
         #Connexion
         self.usersButton.clicked.connect(self.showMenu)
         self.returnButton.clicked.connect(self.showUserMenu)
+        self.selectTweetButton.clicked.connect(self.showTweetMenu)
 
     def showUserMenu(self):
         self.mainLayout.setCurrentWidget(self.userWidget)
@@ -68,6 +71,8 @@ class TweetInterface(QMainWindow):
         self.usersMenu.exec_(QCursor.pos())
         if self.sender().text() != 'User Menu':
             self.printUser()
+    def showTweetMenu(self):
+        self.tweetSelectMenu.exec_(QCursor.pos())
 
     def printUser(self):
 ##        self.usersMenu.exec_(QCursor.pos())
@@ -105,10 +110,17 @@ class TweetInterface(QMainWindow):
             userTableWidget = QTableWidgetItem(self.userList[self.userChoice][1])
             self.tweetTableWidget.setItem(count,0,userTableWidget)
             count += 1
-        self.tweetLayout.addWidget(self.tweetTableWidget,1,0)
+        self.tweetSelectMenu()
+        self.tweetLayout.addWidget(self.selectTweetButton,2,2)
+        self.tweetLayout.addWidget(self.tweetTableWidget,1,0,1,3)
         self.mainLayout.setCurrentWidget(self.tweetWidget)
         
 
+    def tweetSelectMenu(self):
+        self.tweetSelectMenu = QMenu()
+        for count in range(10):
+            self.tweetSelectMenu.addAction('Tweet # {0}'.format(count+1)).triggered.connect(self.selectedTweet)
+        self.tweetActionsList = self.tweetSelectMenu.actions()
     def getUsersNumber(self):
         self.userList = getUsersFromDatabaseGUI()
         self.userNumber = len(self.userList)
@@ -117,6 +129,14 @@ class TweetInterface(QMainWindow):
         for count in range(self.userNumber):
             self.usersMenu.addAction('{0}'.format(self.userList[count][0])).triggered.connect(self.printUser)
         self.actionsList = self.usersMenu.actions()
+
+    def selectedTweet(self):
+        #print(self.sender().text())
+        self.tweetChoice = 0
+        while self.tweetActionsList[self.tweetChoice].text() != self.sender().text():
+            self.tweetChoice += 1
+        #print(self.tweetChoice)
+        BookmarkTool.setData()
         
 
 if __name__ == '__main__':
