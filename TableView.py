@@ -26,7 +26,7 @@ class TableViewWindow(QMainWindow):
 
         #Create Layout
         self.layout = QGridLayout()
-        self.layout.addWidget(self.tableView,0,0)
+        self.layout.addWidget(self.tableView,0,0,1,2)
         self.layout.addWidget(self.cancelButton,1,0)
         self.layout.addWidget(self.submitButton,1,1)
 
