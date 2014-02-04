@@ -9,7 +9,7 @@ from PyQt4.QtSql import *
 
 import sys
 
-class BookmarkWindow(QMainWindow):
+class BookmarkWindow(QDialog):
     def __init__(self):
         super().__init__()
 
@@ -47,11 +47,12 @@ class BookmarkWindow(QMainWindow):
         self.BookmarkLayout.addWidget(self.cancelButton,3,0,1,2)
         self.BookmarkLayout.addWidget(self.submitPushButton,3,2,1,2)
 
-        #Create Central Widget
+##        #Create Central Widget
         self.bookmarkWidget = QWidget()
         self.bookmarkWidget.setLayout(self.BookmarkLayout)
-        self.setCentralWidget(self.bookmarkWidget)
-
+##        self.setCentralWidget(self.bookmarkWidget)
+        self.setLayout(self.BookmarkLayout)
+        
         #Set conexions
         self.cancelButton.clicked.connect(self.return_)
 
@@ -60,7 +61,7 @@ class BookmarkWindow(QMainWindow):
         self.siteNameLineEdit.setText(bookmarkInfo[1])
 
     def return_(self):
-        return True
+        self.close()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

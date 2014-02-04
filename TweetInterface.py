@@ -11,6 +11,8 @@ from sql_gui_misc import *
 from BookmarkTool import *
 
 import sys
+import re
+import urllib.request
 
 class TweetInterface(QMainWindow):
     def __init__(self,twitter):
@@ -138,16 +140,21 @@ class TweetInterface(QMainWindow):
         #print(self.tweetChoice)
         self.BookmarkToolWindow = BookmarkWindow()
         if self.timeline[self.tweetChoice]['entities']['urls'] != []:
-            self.getLinkInfo()
+            self.getLinkInfo(self.timeline[self.tweetChoice]['entities']['urls'][0]['url'])
+            bookmarkInfo = [self.timeline[self.tweetChoice]['entities']['urls'][0]['url'],self.siteName]
+            self.BookmarkToolWindow.setData(bookmarkInfo)
+            self.BookmarkToolWindow.show()
         else:
             bookmarkInfo = ['null','null']
             self.BookmarkToolWindow.setData(bookmarkInfo)
-            self.BookmarkDialog = QInputDialog(self.BookmarkToolWindow.bookmarkWidget)
-            self.mainLayout.addWidget(self.BookmarkToolWindow.bookmarkWidget)
-            self.mainLayout.setCurrentWidget(self.BookmarkToolWindow.bookmarkWidget)
+            self.BookmarkToolWindow.show()
             
-    def getLinkInfo(self):
-        pass
+    def getLinkInfo(self,link):
+        regex = re.compile('<title>(.*?)</title>')
+        url = urllib.request.urlopen(link) #Gets the data from the url
+        html = url.read() #Converts HTTPRequest into text
+        html = str(html) #Changes from 'bytes' to str so re will work
+        self.siteName = regex.search(html).group(1)
         
 
 if __name__ == '__main__':
