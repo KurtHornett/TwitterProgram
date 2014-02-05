@@ -138,7 +138,7 @@ class TweetInterface(QMainWindow):
         while self.tweetActionsList[self.tweetChoice].text() != self.sender().text():
             self.tweetChoice += 1
         #print(self.tweetChoice)
-        self.BookmarkToolWindow = BookmarkWindow()
+        self.BookmarkToolWindow = BookmarkWindow(self.timeline,self.tweetChoice,self.userList,self.userChoice)
         if self.timeline[self.tweetChoice]['entities']['urls'] != []:
             self.getLinkInfo(self.timeline[self.tweetChoice]['entities']['urls'][0]['url'])
             bookmarkInfo = [self.timeline[self.tweetChoice]['entities']['urls'][0]['url'],self.siteName]

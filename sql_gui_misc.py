@@ -3,7 +3,7 @@
 #GUI Implemetation
 
 import sqlite3
-
+from twitter_database import *
 
 def databaseUserList():
     sql = '''SELECT Username,ScreenName,UserID
@@ -26,3 +26,22 @@ def getUsersFromDatabaseGUI():
     db = 'Bookmark_Database.db'
     users = textQuery(sql,())
     return users
+
+def addBookmarkGUI(data,db):
+    sql = '''INSERT INTO Bookmark(BookmarkTitle,SiteName,SiteDescription,Link,TweetID)
+               VALUES(?,?,?,?,?)'''
+    query(sql,data,db)
+
+def addTweetGUI(data):
+    sql = '''INSERT INTO Tweet(TweetText,UserID) VALUES(?,?)'''
+    db = 'Bookmark_Database.db'
+    query(sql,data,db)
+
+def getLatestTweetGUI():
+    sql = '''SELECT TweetID FROM Tweet WHERE TweetID = (SELECT MAX(TweetID) FROM Tweet)'''
+    db = 'Bookmark_Database.db'
+    maxId = searchQuery(sql,(),db)
+    return maxId
+
+    
+        

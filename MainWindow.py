@@ -39,7 +39,6 @@ class MainWindow(QMainWindow):
         self.quitAction = self.fileMenu.addAction('Quit')
         self.searchAction = self.searchMenu.addAction('New Search')
         self.tweetAction = self.searchMenu.addAction('Search Users Tweets')
-        self.addAction = self.managementMenu.addAction('Add Bookmark')
         self.deleteAction = self.managementMenu.addAction('Delete Entries')
         self.modifyAction = self.managementMenu.addAction('Modity Databases')
         self.suggestedAction = self.suggestedMenu.addAction('Display Suggested Users')
@@ -50,14 +49,12 @@ class MainWindow(QMainWindow):
 
         #Import Layouts
         self.searchInterface = SearchWindow(self.twitter)
-        self.bookmarkInterface = BookmarkWindow()
         self.tableInterface = TableViewWindow()
         self.tweetSearchInterface = TweetInterface(self.twitter)
 
         #Create Layout
         self.layout = QStackedLayout()
         self.layout.addWidget(self.searchInterface.searchWidget)
-        self.layout.addWidget(self.bookmarkInterface.bookmarkWidget)
         self.layout.addWidget(self.tableInterface.tableWidget)
         self.layout.addWidget(self.tweetSearchInterface.tweetsWidget)
 
@@ -69,12 +66,10 @@ class MainWindow(QMainWindow):
         #Add Action Actions
         self.searchAction.triggered.connect(self.newSearch)
         self.tweetAction.triggered.connect(self.tweetSearch)
-        self.addAction.triggered.connect(self.addBookmark)
         self.modifyAction.triggered.connect(self.modifyBookmarks)
         self.quitAction.triggered.connect(self.quit_)
 
         #Actions for sub-classes
-        self.bookmarkInterface.cancelButton.clicked.connect(self.cancelAction)
         self.tableInterface.cancelButton.clicked.connect(self.cancelAction)
 
     def newSearch(self):
@@ -83,13 +78,11 @@ class MainWindow(QMainWindow):
     def tweetSearch(self):
         self.layout.setCurrentWidget(self.tweetSearchInterface.tweetsWidget)
         self.setWindowTitle('Tweet Search Interface')
-    def addBookmark(self):
-        self.layout.setCurrentWidget(self.bookmarkInterface.bookmarkWidget)
-        self.setWindowTitle('Add Bookamrk')
     def cancelAction(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
         self.setWindowTitle('New Search')
     def modifyBookmarks(self):
+        self.tableInterface.createTableModel()
         self.layout.setCurrentWidget(self.tableInterface.tableWidget)
         self.setWindowTitle('Modify Database')
     def createTwitterObject(self):

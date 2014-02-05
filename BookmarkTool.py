@@ -7,14 +7,23 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtSql import *
 
+from twitter_database import *
+from sql_gui_misc import *
+
 import sys
 
 class BookmarkWindow(QDialog):
-    def __init__(self):
+    def __init__(self,timeline,choice,userList,userChoice):
         super().__init__()
 
         #Set Window Title
         self.setWindowTitle('Bookmark Creation Tool')
+
+        #Set Data
+        self.timeline = timeline
+        self.choice = choice
+        self.userList = userList
+        self.userChoice = userChoice
 
         #Create Labels
         self.titleLabel = QLabel('Bookmark Title')
@@ -55,10 +64,22 @@ class BookmarkWindow(QDialog):
         
         #Set conexions
         self.cancelButton.clicked.connect(self.return_)
+        self.submitPushButton.clicked.connect(self.addBookmark)
 
     def setData(self,bookmarkInfo):
+        self.bookmarkInfo = bookmarkInfo
         self.linkLineEdit.setText(bookmarkInfo[0])
         self.siteNameLineEdit.setText(bookmarkInfo[1])
+
+    def addBookmark(self,):
+        db = 'Bookmark_database.db'
+        tweetData = (self.timeline[self.choice]['text'],self.userList[self.userChoice][2])
+        print(tweetData[1])
+        addTweetGUI(tweetData)
+        tweetID = getLatestTweetGUI()
+        print(tweetID)
+        bookmarkData = (self.titleLineEdit.text(),self.siteNameLineEdit.text(),self.siteDescLineEdit.text(),self.linkLineEdit.text(),tweetID[0][0])
+        addBookmarkGUI(bookmarkData,db)
 
     def return_(self):
         self.close()
