@@ -8,6 +8,7 @@ from PyQt4.QtSql import *
 
 from sql_gui_misc import *
 from twitter_database import *
+from confirmDeleteDialog import *
 
 import sys
 
@@ -62,10 +63,21 @@ class DeleteInterface(QMainWindow):
 
     def createDeleteAction(self):
         self.deleteMenu = QMenu()
-        num = getBookmarkNumber()
+        num, self.bookmarkList = getBookmarkNumber()
         for count in range(num):
-            self.deleteMenu.addAction('Bookmark # {0}'.format(count+1))
+            self.deleteMenu.addAction('Bookmark # {0}'.format(count+1)).triggered.connect(self.getDeleteOption)
         self.deleteActionList = self.deleteMenu.actions()
+
+    def getDeleteOption(self):
+        self.deleteChoice = 0
+        count = 0
+        while self.deleteActionList[count].text() != self.sender().text():
+            count += 1
+        print(count)
+
+    def confirmDelete(self):
+        try:
+            
 
 
 if __name__ == '__main__':

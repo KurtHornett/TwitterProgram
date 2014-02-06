@@ -49,7 +49,7 @@ def getBookmarkNumber():
     data = ()
     list_ = textQuery(sql,data)
     num = len(list_)
-    return num
+    return num, list_
 
     
         
