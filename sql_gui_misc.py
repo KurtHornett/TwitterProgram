@@ -43,5 +43,13 @@ def getLatestTweetGUI():
     maxId = searchQuery(sql,(),db)
     return maxId
 
+def getBookmarkNumber():
+    sql = '''SELECT * FROM Bookmark'''
+    db = 'Bookmark_Database.db'
+    data = ()
+    list_ = textQuery(sql,data)
+    num = len(list_)
+    return num
+
     
         

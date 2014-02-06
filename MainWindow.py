@@ -10,6 +10,7 @@ from SearchWindow import *
 from BookmarkTool import *
 from TableView import *
 from TweetInterface import *
+from DeleteInterface import *
 
 #CLI Modules
 from twitter_cli import *

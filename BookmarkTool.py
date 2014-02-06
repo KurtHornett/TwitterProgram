@@ -72,14 +72,20 @@ class BookmarkWindow(QDialog):
         self.siteNameLineEdit.setText(bookmarkInfo[1])
 
     def addBookmark(self,):
-        db = 'Bookmark_database.db'
-        tweetData = (self.timeline[self.choice]['text'],self.userList[self.userChoice][2])
-        print(tweetData[1])
-        addTweetGUI(tweetData)
-        tweetID = getLatestTweetGUI()
-        print(tweetID)
-        bookmarkData = (self.titleLineEdit.text(),self.siteNameLineEdit.text(),self.siteDescLineEdit.text(),self.linkLineEdit.text(),tweetID[0][0])
-        addBookmarkGUI(bookmarkData,db)
+        try:
+            db = 'Bookmark_database.db'
+            tweetData = (self.timeline[self.choice]['text'],self.userList[self.userChoice][2])
+            addTweetGUI(tweetData)
+            tweetID = getLatestTweetGUI()
+            bookmarkData = (self.titleLineEdit.text(),self.siteNameLineEdit.text(),self.siteDescLineEdit.text(),self.linkLineEdit.text(),tweetID[0][0])
+            addBookmarkGUI(bookmarkData,db)
+            doneMessage = QMessageBox()
+            doneMessage.setText('Bookmark Successfully added')
+            doneMessage.exec_()
+        except:
+            error = QErrorMessage()
+            error.showMessage('An Error Occured')
+            error.exec_()
 
     def return_(self):
         self.close()

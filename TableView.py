@@ -38,8 +38,11 @@ class TableViewWindow(QMainWindow):
         #Create Table Model
         self.createTableModel()
 
+        #Connexions
+        self.submitButton.clicked.connect(self.updateModify)
+
     def createTableModel(self):
-        self.model =QSqlRelationalTableModel()
+        self.model = QSqlRelationalTableModel()
         self.model.setEditStrategy(QSqlRelationalTableModel.OnManualSubmit)
         self.model.setTable('Bookmark')
         self.tableView.setModel(self.model)
@@ -49,6 +52,18 @@ class TableViewWindow(QMainWindow):
         self.db = QSqlDatabase.addDatabase('QSQLITE')
         self.db.setDatabaseName('Bookmark_Database.db')
         self.db.open()
+
+    def updateModify(self):
+        try:
+            self.model.submitAll()
+            doneMessage = QMessageBox()
+            doneMessage.setWindowTitle('Confimation Message')
+            doneMessage.setText('Database modified')
+            doneMessage.exec_()
+        except:
+            error = QErrorMessage()
+            error.showMessage('An Eror Occured')
+            error.exec_()
 
 
 
