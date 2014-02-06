@@ -21,14 +21,16 @@ class TableViewWindow(QMainWindow):
 
         #Create Table View & Buttons
         self.tableView = QTableView()
+        self.label = QLabel('Edit Bookmarks and click \'Submit\'')
         self.cancelButton = QPushButton('Cancel')
         self.submitButton = QPushButton('Submit')
 
         #Create Layout
         self.layout = QGridLayout()
-        self.layout.addWidget(self.tableView,0,0,1,2)
-        self.layout.addWidget(self.cancelButton,1,0)
-        self.layout.addWidget(self.submitButton,1,1)
+        self.layout.addWidget(self.label,0,0)
+        self.layout.addWidget(self.tableView,1,0,1,2)
+        self.layout.addWidget(self.cancelButton,2,0)
+        self.layout.addWidget(self.submitButton,2,1)
 
         #Create Central Widget
         self.tableWidget = QWidget()

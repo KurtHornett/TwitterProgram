@@ -52,12 +52,14 @@ class MainWindow(QMainWindow):
         self.searchInterface = SearchWindow(self.twitter)
         self.tableInterface = TableViewWindow()
         self.tweetSearchInterface = TweetInterface(self.twitter)
+        self.deleteInterface = DeleteInterface()
 
         #Create Layout
         self.layout = QStackedLayout()
         self.layout.addWidget(self.searchInterface.searchWidget)
         self.layout.addWidget(self.tableInterface.tableWidget)
         self.layout.addWidget(self.tweetSearchInterface.tweetsWidget)
+        self.layout.addWidget(self.deleteInterface.deleteWidget)
 
         #Set Main Widget
         self.widget = QWidget()
@@ -68,10 +70,12 @@ class MainWindow(QMainWindow):
         self.searchAction.triggered.connect(self.newSearch)
         self.tweetAction.triggered.connect(self.tweetSearch)
         self.modifyAction.triggered.connect(self.modifyBookmarks)
+        self.deleteAction.triggered.connect(self.deleteBookmarks)
         self.quitAction.triggered.connect(self.quit_)
 
         #Actions for sub-classes
         self.tableInterface.cancelButton.clicked.connect(self.cancelAction)
+        self.deleteInterface.cancelButton.clicked.connect(self.cancelAction)
 
     def newSearch(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
@@ -86,6 +90,9 @@ class MainWindow(QMainWindow):
         self.tableInterface.createTableModel()
         self.layout.setCurrentWidget(self.tableInterface.tableWidget)
         self.setWindowTitle('Modify Database')
+    def deleteBookmarks(self):
+        self.layout.setCurrentWidget(self.deleteInterface.deleteWidget)
+        self.setWindowTitle('Deletion Interface')
     def createTwitterObject(self):
         consumer_key = getConsumerKey()
         MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')

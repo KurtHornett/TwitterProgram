@@ -8,7 +8,7 @@ from PyQt4.QtSql import *
 
 from sql_gui_misc import *
 from twitter_database import *
-from confirmDeleteDialog import *
+from ConfirmDeleteDialog import *
 
 import sys
 
@@ -77,7 +77,9 @@ class DeleteInterface(QMainWindow):
 
     def confirmDelete(self):
         try:
-            
+            pass
+        except:
+            pass
 
 
 if __name__ == '__main__':

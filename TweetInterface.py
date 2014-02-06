@@ -112,13 +112,13 @@ class TweetInterface(QMainWindow):
             userTableWidget = QTableWidgetItem(self.userList[self.userChoice][1])
             self.tweetTableWidget.setItem(count,0,userTableWidget)
             count += 1
-        self.tweetSelectMenu()
+        self.tweetSelectMenuFunc()
         self.tweetLayout.addWidget(self.selectTweetButton,2,2)
         self.tweetLayout.addWidget(self.tweetTableWidget,1,0,1,3)
         self.mainLayout.setCurrentWidget(self.tweetWidget)
         
 
-    def tweetSelectMenu(self):
+    def tweetSelectMenuFunc(self):
         self.tweetSelectMenu = QMenu()
         for count in range(10):
             self.tweetSelectMenu.addAction('Tweet # {0}'.format(count+1)).triggered.connect(self.selectedTweet)
