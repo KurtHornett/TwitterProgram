@@ -17,4 +17,7 @@ class SuggestedInteface(QMainWindow):
         super().__init__()
         #set Window Title
         self.setWindowTile('Suggested Users')
-        
+
+        #Set up Inerface
+        self.slugButton = QPushButton('Select Topic')
+         
