@@ -65,16 +65,14 @@ class DeleteInterface(QMainWindow):
         self.deleteMenu = QMenu()
         num, self.bookmarkList = getBookmarkNumber()
         for count in range(num):
-            self.deleteMenu.addAction('Bookmark # {0}'.format(count+1)).triggered.connect(self.getDeleteOption)
+            self.deleteMenu.addAction('Bookmark # {0}'.format(self.bookmarkList[count][0])).triggered.connect(self.getDeleteOption)
         self.deleteActionList = self.deleteMenu.actions()
-
     def getDeleteOption(self):
         self.deleteChoice = 0
         count = 0
         while self.deleteActionList[count].text() != self.sender().text():
             count +=1
             self.deleteChoice += 1
-        print(self.deleteChoice)
         self.confirmDelete()
 
     def confirmDelete(self):
@@ -87,9 +85,10 @@ class DeleteInterface(QMainWindow):
             error.setText('An Error Occured')
             error.exec_()
 
-    def delete():
-        deleteBookmarkGUI(self.deleteChoice)
+    def delete(self):
+        deleteBookmarkGUI(self.bookmarkList[self.deleteChoice][0])
         self.createTableModel()
+        self.createDeleteAction()
         
 
         

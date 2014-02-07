@@ -91,6 +91,7 @@ class MainWindow(QMainWindow):
         self.layout.setCurrentWidget(self.tableInterface.tableWidget)
         self.setWindowTitle('Modify Database')
     def deleteBookmarks(self):
+        self.deleteInterface.createTableModel()
         self.layout.setCurrentWidget(self.deleteInterface.deleteWidget)
         self.setWindowTitle('Deletion Interface')
     def createTwitterObject(self):
