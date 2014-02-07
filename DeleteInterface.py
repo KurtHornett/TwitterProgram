@@ -72,14 +72,27 @@ class DeleteInterface(QMainWindow):
         self.deleteChoice = 0
         count = 0
         while self.deleteActionList[count].text() != self.sender().text():
-            count += 1
-        print(count)
+            count +=1
+            self.deleteChoice += 1
+        print(self.deleteChoice)
+        self.confirmDelete()
 
     def confirmDelete(self):
         try:
-            pass
+            self.confirmDialog = ConfirmDeleteDialog(self.bookmarkList,self.deleteChoice)
+            self.confirmDialog.show()
+            self.delete()
         except:
-            pass
+            error = QMessageBox()
+            error.setText('An Error Occured')
+            error.exec_()
+
+    def delete():
+        deleteBookmarkGUI(self.deleteChoice)
+        self.createTableModel()
+        
+
+        
 
 
 if __name__ == '__main__':

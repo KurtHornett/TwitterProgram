@@ -51,5 +51,10 @@ def getBookmarkNumber():
     num = len(list_)
     return num, list_
 
+def deleteBookmarkGUI(Dchoice):
+    sql = '''DELETE FROM Bookmark WHERE BookmarkID = ?'''
+    db = 'Bookmark_Database.db'
+    query(sql,(Dchoice,),db)
+
     
         
