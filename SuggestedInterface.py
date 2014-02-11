@@ -34,10 +34,11 @@ class SuggestedInterface(QMainWindow):
         self.layout.addWidget(self.slugButton,1,0)
         self.layout.addWidget(self.userTableWidget,1,1)
         self.layout.addWidget(self.cancelButton,3,0)
-        self.layout.addWidget(self.selectUserButton,3,1)
+        #self.layout.addWidget(self.selectUserButton,3,1)
 
         #Pre-lim mthds
         self.slugMenu()
+        
 
         #Create Widget set Widget
         self.suggUserWidget = QWidget()
@@ -46,6 +47,7 @@ class SuggestedInterface(QMainWindow):
 
         #Connexions
         self.slugButton.clicked.connect(self.showSlugMenu)
+        self.selectUserButton.clicked.connect(self.showUserMenu)
 
     def slugMenu(self):
         self.slugMenu = QMenu()
@@ -56,6 +58,9 @@ class SuggestedInterface(QMainWindow):
     def showSlugMenu(self):
         self.slugMenu.exec_(QCursor.pos())
 
+    def showUserMenu(self):
+        self.userMenu.exec_(QCursor.pos())
+
     def getSuggUsers(self):
         print(self.sender().text())
         if self.sender().text() == 'News Users':
@@ -64,7 +69,40 @@ class SuggestedInterface(QMainWindow):
             self.suggUsers = self.twitter.users.suggestions.technology.members()
         elif self.sender().text() == 'Business Users':
             self.suggUsers = self.twitter.users.suggestions.business.members()
-        print(self.suggUsers)
+##        for users in self.suggUsers:
+##            print(self.suggUsers[0]['name'])
+        self.createTable()
+
+    def createTable(self):
+        self.userTableWidget.setColumnCount(2)
+        self.userTableWidget.setRowCount(len(self.suggUsers))
+        columnNames = ['Screen Name','User Name']
+        self.userTableWidget.setHorizontalHeaderLabels(columnNames)
+        count = 0
+        while count < len(self.suggUsers):
+            screenTableWidgetItem = QTableWidgetItem(self.suggUsers[count]['name'])
+            userTableWidgetItem = QTableWidgetItem(self.suggUsers[count]['screen_name'])
+            self.userTableWidget.setItem(count,0,screenTableWidgetItem)
+            self.userTableWidget.setItem(count,1,userTableWidgetItem)
+            count += 1
+        self.createSubmitButton()
+
+    def createSubmitButton(self):
+        self.userMenu = QMenu()
+        count = 0
+        for users in self.suggUsers:
+            self.userMenu.addAction('User {0}'.format(count+1)).triggered.connect(self.addUser)
+            count += 1
+        self.userActionList = self.userMenu.actions()
+        self.addButton()
+
+
+    def addButton(self):
+        self.layout.addWidget(self.selectUserButton,3,1)
+
+    def addUser(self):
+        pass
+        
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = SuggestedInterface()
