@@ -11,6 +11,7 @@ from BookmarkTool import *
 from TableView import *
 from TweetInterface import *
 from DeleteInterface import *
+from SuggestedInterface import *
 
 #CLI Modules
 from twitter_cli import *
@@ -53,6 +54,7 @@ class MainWindow(QMainWindow):
         self.tableInterface = TableViewWindow()
         self.tweetSearchInterface = TweetInterface(self.twitter)
         self.deleteInterface = DeleteInterface()
+        self.suggestedInterface = SuggestedInterface(self.twitter)
 
         #Create Layout
         self.layout = QStackedLayout()
@@ -60,6 +62,7 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.tableInterface.tableWidget)
         self.layout.addWidget(self.tweetSearchInterface.tweetsWidget)
         self.layout.addWidget(self.deleteInterface.deleteWidget)
+        self.layout.addWidget(self.suggestedInterface.suggUserWidget)
 
         #Set Main Widget
         self.widget = QWidget()
@@ -71,15 +74,17 @@ class MainWindow(QMainWindow):
         self.tweetAction.triggered.connect(self.tweetSearch)
         self.modifyAction.triggered.connect(self.modifyBookmarks)
         self.deleteAction.triggered.connect(self.deleteBookmarks)
+        self.suggestedAction.triggered.connect(self.displaySuggested)
         self.quitAction.triggered.connect(self.quit_)
 
         #Actions for sub-classes
         self.tableInterface.cancelButton.clicked.connect(self.cancelAction)
         self.deleteInterface.cancelButton.clicked.connect(self.cancelAction)
+        self.suggestedInterface.cancelButton.clicked.connect(self.cancelAction)
 
     def newSearch(self):
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
-        self.setWindowTitle('New Search')
+        self.setWindowTitle('Twitter Program')
     def tweetSearch(self):
         self.layout.setCurrentWidget(self.tweetSearchInterface.tweetsWidget)
         self.setWindowTitle('Tweet Search Interface')
@@ -95,6 +100,9 @@ class MainWindow(QMainWindow):
         self.deleteInterface.createDeleteAction()
         self.layout.setCurrentWidget(self.deleteInterface.deleteWidget)
         self.setWindowTitle('Deletion Interface')
+    def displaySuggested(self):
+        self.layout.setCurrentWidget(self.suggestedInterface.suggUserWidget)
+        self.setWindowTitle('Suggested Users')
     def createTwitterObject(self):
         consumer_key = getConsumerKey()
         MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
