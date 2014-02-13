@@ -36,6 +36,7 @@ class SearchWindow(QMainWindow):
 
         #Open and Connect Database
         connectDatabase.createConnectedDatabase()
+        
         #Add Users Widget
         self.createTableModel()
         self.layout.addWidget(self.usersLabel,2,0)

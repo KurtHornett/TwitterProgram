@@ -59,7 +59,6 @@ class TweetInterface(QMainWindow):
 
         #Set Centarl Layout
         self.setCentralWidget(self.tweetsWidget)
-        
 
         #Connexion
         self.usersButton.clicked.connect(self.showMenu)
@@ -73,6 +72,7 @@ class TweetInterface(QMainWindow):
         self.usersMenu.exec_(QCursor.pos())
         if self.sender().text() != 'User Menu':
             self.printUser()
+            
     def showTweetMenu(self):
         self.tweetSelectMenu.exec_(QCursor.pos())
 
@@ -109,6 +109,7 @@ class TweetInterface(QMainWindow):
         for count in range(10):
             self.tweetSelectMenu.addAction('Tweet # {0}'.format(count+1)).triggered.connect(self.selectedTweet)
         self.tweetActionsList = self.tweetSelectMenu.actions()
+        
     def getUsersNumber(self):
         self.userList = getUsersFromDatabaseGUI()
         self.userNumber = len(self.userList)

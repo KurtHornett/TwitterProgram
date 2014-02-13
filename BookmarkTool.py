@@ -56,10 +56,8 @@ class BookmarkWindow(QDialog):
         self.BookmarkLayout.addWidget(self.cancelButton,3,0,1,2)
         self.BookmarkLayout.addWidget(self.submitPushButton,3,2,1,2)
 
-##        #Create Central Widget
         self.bookmarkWidget = QWidget()
         self.bookmarkWidget.setLayout(self.BookmarkLayout)
-##        self.setCentralWidget(self.bookmarkWidget)
         self.setLayout(self.BookmarkLayout)
         
         #Set conexions

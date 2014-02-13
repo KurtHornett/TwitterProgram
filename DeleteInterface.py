@@ -78,7 +78,7 @@ class DeleteInterface(QMainWindow):
     def confirmDelete(self):
         try:
             self.confirmDialog = ConfirmDeleteDialog(self.bookmarkList,self.deleteChoice)
-            self.confirmDialog.show()
+            self.confirmDialog.exec_()
             self.delete()
         except:
             error = QMessageBox()
