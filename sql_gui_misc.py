@@ -56,5 +56,11 @@ def deleteBookmarkGUI(Dchoice):
     db = 'Bookmark_Database.db'
     query(sql,(Dchoice,),db)
 
+def addSuggestedUser(data):
+    sql = '''INSERT INTO User(UserName,ScreenName)
+               VALUES(?,?)'''
+    db = 'Bookmark_Database.db'
+    query(sql,data,db)
+
     
         

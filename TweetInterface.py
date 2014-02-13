@@ -77,10 +77,6 @@ class TweetInterface(QMainWindow):
         self.tweetSelectMenu.exec_(QCursor.pos())
 
     def printUser(self):
-##        self.usersMenu.exec_(QCursor.pos())
-##        print(self.sender().text())
-##        if self.sender() in self.actionsList:
-##            print('Yes')
         if self.sender().text() != self.usersButton.text():
             self.userChoice = 0
             while self.actionsList[self.userChoice].text() != self.sender().text():
@@ -89,17 +85,7 @@ class TweetInterface(QMainWindow):
 
     def displayTweet(self):
         self.timeline = self.twitter.statuses.user_timeline(id=self.userList[self.userChoice][1])
-##        count = 0
-##        while count < 10:
-##            self.singleTweetLayout = QTextEdit()
-##            self.singleTweetLayout.setText(self.timeline[count]['text'])
-##            self.singleTweetLayout.setReadOnly(True)
-##            self.tweetLayout.addWidget(self.singleTweetLayout,count+1,0)
-##            count += 1
-##        for counter in ra,,nge(count):
-##            self.tweetLayout.setRowMinimumHeight(counter,5)
         self.tweetLayout.addWidget(self.returnButton,2,0)
-##        self.mainLayout.setCurrentWidget(self.tweetWidget)
         self.tweetTableWidget = QTableWidget(10,2)
         tweetListLabels = ['Username','Tweet Text']
         self.tweetTableWidget.setHorizontalHeaderLabels(tweetListLabels)
@@ -133,11 +119,9 @@ class TweetInterface(QMainWindow):
         self.actionsList = self.usersMenu.actions()
 
     def selectedTweet(self):
-        #print(self.sender().text())
         self.tweetChoice = 0
         while self.tweetActionsList[self.tweetChoice].text() != self.sender().text():
             self.tweetChoice += 1
-        #print(self.tweetChoice)
         self.BookmarkToolWindow = BookmarkWindow(self.timeline,self.tweetChoice,self.userList,self.userChoice)
         if self.timeline[self.tweetChoice]['entities']['urls'] != []:
             self.getLinkInfo(self.timeline[self.tweetChoice]['entities']['urls'][0]['url'])

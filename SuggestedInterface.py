@@ -38,7 +38,6 @@ class SuggestedInterface(QMainWindow):
 
         #Pre-lim mthds
         self.slugMenu()
-        
 
         #Create Widget set Widget
         self.suggUserWidget = QWidget()
@@ -62,15 +61,12 @@ class SuggestedInterface(QMainWindow):
         self.userMenu.exec_(QCursor.pos())
 
     def getSuggUsers(self):
-        print(self.sender().text())
         if self.sender().text() == 'News Users':
             self.suggUsers = self.twitter.users.suggestions.news.members()
         elif self.sender().text() == 'Technology Users':
             self.suggUsers = self.twitter.users.suggestions.technology.members()
         elif self.sender().text() == 'Business Users':
             self.suggUsers = self.twitter.users.suggestions.business.members()
-##        for users in self.suggUsers:
-##            print(self.suggUsers[0]['name'])
         self.createTable()
 
     def createTable(self):
@@ -101,7 +97,26 @@ class SuggestedInterface(QMainWindow):
         self.layout.addWidget(self.selectUserButton,3,1)
 
     def addUser(self):
-        pass
+        self.userChoice = 0
+        while self.userActionList[self.userChoice].text() != self.sender().text():
+            self.userChoice += 1
+        try:
+            data = (self.suggUsers[self.userChoice]['name'],self.suggUsers[self.userChoice]['screen_name'])
+            addSuggestedUser(data)
+        except:
+            error = QMessageBox()
+            error.setText('An Error Occured')
+            error.setWindowTitle('Error Message')
+            error.exec_()
+        self.confirmMessage()
+            
+
+    def confirmMessage(self):
+        confirm = QMessageBox()
+        confirm.setText('\'{0}\' added to database'.format(self.suggUsers[self.userChoice]['name']))
+        confirm.setWindowTitle('User Added to database')
+        confirm.exec_()
+            
         
 if __name__ == '__main__':
     app = QApplication(sys.argv)
