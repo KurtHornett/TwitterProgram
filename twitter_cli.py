@@ -50,6 +50,7 @@ def getChoice():
         choice = int(input('Select number: '))
     except ValueError:
         print('Please enter an integer.')
+        choice = int(input('Select number: '))
     return choice
 
 def getConsumerKey():
@@ -302,7 +303,7 @@ if __name__ == "__main__":
             HoMo = getChoice()
             if HoMo == 1:
                 displayLatestTweets(home_timeline,count)
-            else:
+            elif HoMo == 2:
                 displayLatestTweets(userTm,count)
         elif choice == 4:
             databaseMenu()
@@ -322,6 +323,8 @@ if __name__ == "__main__":
                             print('User already exits, not added')
                     except:
                         print('An error occur\'d')
+                    choice1 = 0
+                else:
                     choice1 = 0
         elif choice == 5:
             users = getUsersFromDatabase()
