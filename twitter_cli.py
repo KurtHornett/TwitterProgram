@@ -62,7 +62,7 @@ def getConsumerKey():
 def authApp(consumer_key):
     #All necessary proceedures for authorising app and therefore loggin into twitter, doesn't allow log out.
     #Uses PIN authorization  - could change to UserPass later in app stages and implemetation
-    #MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
+    MY_TWITTER_CREDS = os.path.expanduser('~/.login_credentials')
     if not os.path.exists(MY_TWITTER_CREDS):
         oauth_dance("KurtsApp",'Y4zkic6lw0Hu6uB3sNVH4Q', consumer_key,
                         MY_TWITTER_CREDS)
@@ -322,7 +322,7 @@ if __name__ == "__main__":
                         else:
                             print('User already exits, not added')
                     except:
-                        print('An error occur\'d')
+                        print('An error occured')
                     choice1 = 0
                 else:
                     choice1 = 0
