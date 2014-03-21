@@ -83,6 +83,7 @@ class MainWindow(QMainWindow):
         self.suggestedInterface.cancelButton.clicked.connect(self.cancelAction)
 
     def newSearch(self):
+        self.searchInterface.createTableModel()
         self.layout.setCurrentWidget(self.searchInterface.searchWidget)
         self.setWindowTitle('Twitter Program')
     def tweetSearch(self):
