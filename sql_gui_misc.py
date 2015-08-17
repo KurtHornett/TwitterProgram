@@ -13,7 +13,7 @@ def databaseUserList():
     return users
 
 def textQuery(sql,data):
-    with sqlite3.connect('Bookmark_database.db') as db:
+    with sqlite3.connect('Bookmark_Database.db') as db:
         cursor = db.cursor()
         cursor.execute('PRAGMA foreign_keys = ON')
         cursor.execute(sql,data)

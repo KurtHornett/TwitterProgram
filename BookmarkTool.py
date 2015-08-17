@@ -71,7 +71,7 @@ class BookmarkWindow(QDialog):
 
     def addBookmark(self,):
         try:
-            db = 'Bookmark_database.db'
+            db = 'Bookmark_Database.db'
             tweetData = (self.timeline[self.choice]['text'],self.userList[self.userChoice][2])
             addTweetGUI(tweetData)
             tweetID = getLatestTweetGUI()
