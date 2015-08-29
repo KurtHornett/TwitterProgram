@@ -80,11 +80,13 @@ class BookmarkWindow(QDialog):
             doneMessage = QMessageBox()
             doneMessage.setText('Bookmark Successfully added')
             doneMessage.exec_()
+            self.return_()
         except:
             error = QErrorMessage()
             error.showMessage('An Error Occured')
             error.exec_()
-
+            self.return_()
+    
     def return_(self):
         self.close()
 
